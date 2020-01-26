@@ -1,6 +1,6 @@
 using System;
 
-namespace FinancialOrganizer
+namespace API
 {
     public class WeatherForecast
     {
