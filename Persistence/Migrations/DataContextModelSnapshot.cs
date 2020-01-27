@@ -26,7 +26,7 @@ namespace Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("Decimal(10,2)");
 
                     b.Property<Guid>("AmountModificationCategoryId")
                         .HasColumnType("uniqueidentifier");
@@ -46,11 +46,13 @@ namespace Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar")
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 
-                    b.ToTable("ModificationCategories");
+                    b.ToTable("AmountModificationCategories");
                 });
 
             modelBuilder.Entity("Domain.AppUser", b =>
@@ -67,15 +69,17 @@ namespace Persistence.Migrations
 
                     b.Property<string>("Country")
                         .IsRequired()
-                        .HasColumnType("string");
+                        .HasColumnType("varchar")
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnName("Date Of Birth")
                         .HasColumnType("Date");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .IsRequired()
+                        .HasColumnType("varchar")
+                        .HasMaxLength(50);
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
@@ -83,12 +87,14 @@ namespace Persistence.Migrations
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnName("First Name")
-                        .HasColumnType("string");
+                        .HasColumnType("varchar")
+                        .HasMaxLength(50);
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnName("Last Name")
-                        .HasColumnType("string");
+                        .HasColumnType("varchar")
+                        .HasMaxLength(50);
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -105,6 +111,7 @@ namespace Persistence.Migrations
                         .HasMaxLength(256);
 
                     b.Property<string>("PasswordHash")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
@@ -150,24 +157,27 @@ namespace Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("ExactAmount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("Decimal(10,2)");
 
                     b.Property<DateTime>("FrequencyRangeEnd")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("smalldatetime");
 
                     b.Property<DateTime>("FrequencyRangeStart")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("smalldatetime");
 
                     b.Property<decimal>("MaximumAmount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("Decimal(10,2)");
 
                     b.Property<decimal>("MinimumAmount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("Decimal(10,2)");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar")
+                        .HasMaxLength(50);
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -207,7 +217,9 @@ namespace Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar")
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 
@@ -364,7 +376,9 @@ namespace Persistence.Migrations
 
                     b.HasOne("Domain.AppUser", "User")
                         .WithMany("Transactions")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.TransactionAmountModification", b =>

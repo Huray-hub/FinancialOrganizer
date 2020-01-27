@@ -3,10 +3,22 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Persistence.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "AmountModificationCategories",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Title = table.Column<string>(type: "varchar", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AmountModificationCategories", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -28,10 +40,10 @@ namespace Persistence.Migrations
                     Id = table.Column<string>(nullable: false),
                     UserName = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
-                    Email = table.Column<string>(maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "varchar", maxLength: 50, nullable: false),
                     NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
-                    PasswordHash = table.Column<string>(nullable: true),
+                    PasswordHash = table.Column<string>(nullable: false),
                     SecurityStamp = table.Column<string>(nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
@@ -40,10 +52,10 @@ namespace Persistence.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    FirstName = table.Column<string>(name: "First Name", type: "string", nullable: false),
-                    LastName = table.Column<string>(name: "Last Name", type: "string", nullable: false),
+                    FirstName = table.Column<string>(name: "First Name", type: "varchar", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(name: "Last Name", type: "varchar", maxLength: 50, nullable: false),
                     DateOfBirth = table.Column<DateTime>(name: "Date Of Birth", type: "Date", nullable: false),
-                    Country = table.Column<string>(type: "string", nullable: false)
+                    Country = table.Column<string>(type: "varchar", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -51,27 +63,34 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ModificationCategories",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Title = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ModificationCategories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "TransactionCategories",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(type: "varchar", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TransactionCategories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AmountModifications",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Amount = table.Column<decimal>(type: "Decimal(10,2)", nullable: false),
+                    AmountModificationCategoryId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AmountModifications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AmountModifications_AmountModificationCategories_AmountModificationCategoryId",
+                        column: x => x.AmountModificationCategoryId,
+                        principalTable: "AmountModificationCategories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -181,38 +200,19 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AmountModifications",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Amount = table.Column<decimal>(nullable: false),
-                    AmountModificationCategoryId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AmountModifications", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AmountModifications_ModificationCategories_AmountModificationCategoryId",
-                        column: x => x.AmountModificationCategoryId,
-                        principalTable: "ModificationCategories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Transactions",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(nullable: true),
-                    Currency = table.Column<int>(nullable: false),
-                    ExactAmount = table.Column<decimal>(nullable: false),
-                    MinimumAmount = table.Column<decimal>(nullable: false),
-                    MaximumAmount = table.Column<decimal>(nullable: false),
-                    FrequencyRangeStart = table.Column<DateTime>(nullable: false),
-                    FrequencyRangeEnd = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<string>(nullable: true),
+                    Title = table.Column<string>(type: "varchar", maxLength: 50, nullable: false),
+                    Currency = table.Column<int>(type: "int", nullable: false),
+                    ExactAmount = table.Column<decimal>(type: "Decimal(10,2)", nullable: false),
+                    MinimumAmount = table.Column<decimal>(type: "Decimal(10,2)", nullable: false),
+                    MaximumAmount = table.Column<decimal>(type: "Decimal(10,2)", nullable: false),
+                    FrequencyRangeStart = table.Column<DateTime>(type: "smalldatetime", nullable: false),
+                    FrequencyRangeEnd = table.Column<DateTime>(type: "smalldatetime", nullable: false),
+                    UserId = table.Column<string>(nullable: false),
                     CategoryId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
@@ -229,7 +229,7 @@ namespace Persistence.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -354,7 +354,7 @@ namespace Persistence.Migrations
                 name: "Transactions");
 
             migrationBuilder.DropTable(
-                name: "ModificationCategories");
+                name: "AmountModificationCategories");
 
             migrationBuilder.DropTable(
                 name: "TransactionCategories");
