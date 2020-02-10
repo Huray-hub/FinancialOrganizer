@@ -1,3 +1,4 @@
+using Application;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -19,11 +20,13 @@ namespace API
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddDbContext<DataContext>(option =>
+        {            
+            services.AddDbContext<ApplicationDbContext>(option =>
             {
                 option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+            
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddControllers();
         }

@@ -21,8 +21,8 @@ namespace API
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var context = services.GetRequiredService<DataContext>();
-                    var userManager = services.GetRequiredService<UserManager<AppUser>>();
+                    var context = services.GetRequiredService<ApplicationDbContext>();
+                    //var userManager = services.GetRequiredService<UserManager<AppUser>>();
                     context.Database.Migrate();
                 }
                 catch (Exception ex)
@@ -30,7 +30,6 @@ namespace API
                     var logger = services.GetRequiredService<ILogger<Program>>();
                     logger.LogError(ex, "An error occured during migration");
                 }
-                    
             }
 
             host.Run();
