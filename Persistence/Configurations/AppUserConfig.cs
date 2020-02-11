@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Persistence.Configurations
 {
-    public class ApplicationUserConfig : IEntityTypeConfiguration<AppUser>
+    public class AppUserConfig : IEntityTypeConfiguration<AppUser>
     {
         public void Configure(EntityTypeBuilder<AppUser> builder)
         {
@@ -19,9 +19,9 @@ namespace Persistence.Configurations
 
             builder.Property(u => u.DateOfBirth).HasColumnName("Date Of Birth").HasColumnType("Date").IsRequired();
 
-            builder.Property(u => u.Country).HasColumnType("varchar").HasMaxLength(50).IsRequired();
+            builder.Property(u => u.Country).HasColumnType("varchar(50)").HasMaxLength(50).IsRequired();
 
-            builder.Property(u => u.Email).HasColumnType("varchar").HasMaxLength(50).IsRequired();
+            builder.Property(u => u.Email).HasColumnType("varchar(50)").HasMaxLength(50).IsRequired();
 
             builder.Property(u => u.PasswordHash).IsRequired();
         }

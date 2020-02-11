@@ -11,22 +11,21 @@ namespace API
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {            
-            services.AddDbContext<ApplicationDbContext>(option =>
-            {
-                option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-            });
+        {
+            services.AddPersistence(Configuration);
             
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            //services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddControllers();
         }

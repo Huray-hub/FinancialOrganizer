@@ -10,7 +10,7 @@ namespace Persistence.Configurations
         {
             builder.HasKey(tc => tc.Id);
 
-            builder.Property(tc => tc.Name).HasColumnType("varchar").HasMaxLength(50).IsRequired();
+            builder.Property(tc => tc.Name).HasColumnType("varchar(50)").HasMaxLength(50).IsRequired();
         }
     }
 }

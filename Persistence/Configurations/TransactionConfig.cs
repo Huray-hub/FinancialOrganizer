@@ -16,11 +16,11 @@ namespace Persistence.Configurations
             builder.HasOne(tc => tc.Category).WithOne(tc => tc.Transaction).HasForeignKey<Transaction>(t => t.CategoryId);
 
             //Table types etc
-            builder.Property(t => t.Title).HasColumnType("varchar").HasMaxLength(50).IsRequired();
+            builder.Property(t => t.Title).HasColumnType("varchar(50)").HasMaxLength(50).IsRequired();
 
-            builder.Property(t => t.Type).HasColumnType("int").IsRequired();
+            builder.Property(t => t.Type).HasColumnType("varchar(50)").IsRequired();
 
-            builder.Property(t => t.Currency).HasColumnType("int").IsRequired();
+            builder.Property(t => t.Currency).HasColumnType("varchar(50)").IsRequired();
 
             builder.Property(t => t.ExactAmount).HasColumnType("Decimal(10,2)");
 

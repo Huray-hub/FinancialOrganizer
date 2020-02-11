@@ -15,7 +15,7 @@ namespace Persistence.Configurations
 
             builder.Property(am => am.Amount).HasColumnType("Decimal(10,2)").IsRequired();
 
-            builder.Property(am => am.Type).HasColumnType("int").IsRequired();
+            builder.Property(am => am.Type).HasColumnType("varchar(50)").IsRequired();
         }
     }
 }

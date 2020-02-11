@@ -11,7 +11,7 @@ namespace API.Controllers
     public class TransactionController : ControllerBase
     {
       
-        public TransactionController(IUnitOfWork<ApplicationDbContext> repository)
+        public TransactionController()
         {
             
         }
