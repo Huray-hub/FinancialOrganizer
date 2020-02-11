@@ -10,11 +10,14 @@ namespace API.Controllers
     [Route("[controller]")]
     public class TransactionController : ControllerBase
     {
-      
-        public TransactionController()
+        private readonly IUnitOfWork _unitOfWork;
+
+        public TransactionController(IUnitOfWork unitOfWork)
         {
-            
+            _unitOfWork = unitOfWork;
         }
+
+
 
         
     }
