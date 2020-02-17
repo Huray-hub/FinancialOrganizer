@@ -11,13 +11,21 @@ namespace Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<TransactionAmountModification> builder)
         {
-            builder.HasKey(ta => new { ta.TransactionId, ta.AmountModificationId });
+            builder.HasKey(tam => new { tam.TransactionId, tam.AmountModificationId });
 
-            builder.HasOne(t => t.Transaction).WithMany(tam => tam.TransactionAmountModifications)
-                .HasForeignKey(t => t.TransactionId);
+            builder.Property(tam => tam.TransactionId).HasColumnName("TransactionID");
 
-            builder.HasOne(am => am.AmountModification).WithMany(tam => tam.TransactionAmountModifications)
-                .HasForeignKey(am => am.AmountModificationId);
+            builder.Property(tam => tam.AmountModificationId).HasColumnName("AmountModificationID");
+
+            builder.HasOne(tam => tam.Transaction)
+                .WithMany(t => t.TransactionAmountModifications)
+                .HasForeignKey(tam => tam.TransactionId)
+                .HasConstraintName("FK_TransactionAmountModifications_Transactions");
+
+            builder.HasOne(tam => tam.AmountModification)
+                .WithMany(am => am.TransactionAmountModifications)
+                .HasForeignKey(tam => tam.AmountModificationId)
+                .HasConstraintName("FK_TransactionAmountModifications_AmountModifications");
         }
     }
 }

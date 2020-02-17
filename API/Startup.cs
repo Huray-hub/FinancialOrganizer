@@ -1,4 +1,5 @@
 using Application;
+using Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -23,8 +24,9 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddPersistence(Configuration);
             
+            services.AddPersistence(Configuration);
+            services.AddInfrastructure();
             //services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddControllers();
@@ -41,6 +43,8 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

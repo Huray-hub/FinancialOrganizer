@@ -11,12 +11,12 @@ namespace Persistence.Migrations
                 name: "AmountModificationCategories",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    Title = table.Column<string>(type: "varchar", maxLength: 50, nullable: false)
+                    AmountModificationCategoryID = table.Column<Guid>(nullable: false),
+                    Title = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AmountModificationCategories", x => x.Id);
+                    table.PrimaryKey("PK_AmountModificationCategories", x => x.AmountModificationCategoryID);
                 });
 
             migrationBuilder.CreateTable(
@@ -40,7 +40,7 @@ namespace Persistence.Migrations
                     Id = table.Column<string>(nullable: false),
                     UserName = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "varchar", maxLength: 50, nullable: false),
+                    Email = table.Column<string>(maxLength: 256, nullable: false),
                     NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
                     PasswordHash = table.Column<string>(nullable: false),
@@ -52,10 +52,10 @@ namespace Persistence.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    FirstName = table.Column<string>(name: "First Name", type: "varchar", maxLength: 50, nullable: false),
-                    LastName = table.Column<string>(name: "Last Name", type: "varchar", maxLength: 50, nullable: false),
+                    FirstName = table.Column<string>(name: "First Name", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(name: "Last Name", maxLength: 50, nullable: false),
                     DateOfBirth = table.Column<DateTime>(name: "Date Of Birth", type: "Date", nullable: false),
-                    Country = table.Column<string>(type: "varchar", maxLength: 50, nullable: false)
+                    Country = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -66,30 +66,32 @@ namespace Persistence.Migrations
                 name: "TransactionCategories",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(type: "varchar", maxLength: 50, nullable: false)
+                    TransactionCategoryID = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TransactionCategories", x => x.Id);
+                    table.PrimaryKey("PK_TransactionCategories", x => x.TransactionCategoryID);
                 });
 
             migrationBuilder.CreateTable(
                 name: "AmountModifications",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    Amount = table.Column<decimal>(type: "Decimal(10,2)", nullable: false),
-                    AmountModificationCategoryId = table.Column<Guid>(nullable: false)
+                    AmountModificationID = table.Column<Guid>(nullable: false),
+                    Amount = table.Column<decimal>(type: "money", nullable: false),
+                    AmountType = table.Column<int>(name: "Amount Type", nullable: false),
+                    AmountCalculationType = table.Column<int>(name: "Amount Calculation Type", nullable: false, defaultValue: 0),
+                    AmountModificationCategoryID = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AmountModifications", x => x.Id);
+                    table.PrimaryKey("PK_AmountModifications", x => x.AmountModificationID);
                     table.ForeignKey(
-                        name: "FK_AmountModifications_AmountModificationCategories_AmountModificationCategoryId",
-                        column: x => x.AmountModificationCategoryId,
+                        name: "FK_AmountModifications_AmountModificationCategory",
+                        column: x => x.AmountModificationCategoryID,
                         principalTable: "AmountModificationCategories",
-                        principalColumn: "Id",
+                        principalColumn: "AmountModificationCategoryID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -203,30 +205,30 @@ namespace Persistence.Migrations
                 name: "Transactions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "varchar", maxLength: 50, nullable: false),
-                    Currency = table.Column<int>(type: "int", nullable: false),
-                    ExactAmount = table.Column<decimal>(type: "Decimal(10,2)", nullable: false),
-                    MinimumAmount = table.Column<decimal>(type: "Decimal(10,2)", nullable: false),
-                    MaximumAmount = table.Column<decimal>(type: "Decimal(10,2)", nullable: false),
-                    FrequencyRangeStart = table.Column<DateTime>(type: "smalldatetime", nullable: false),
-                    FrequencyRangeEnd = table.Column<DateTime>(type: "smalldatetime", nullable: false),
-                    UserId = table.Column<string>(nullable: false),
-                    CategoryId = table.Column<Guid>(nullable: false)
+                    TransactionID = table.Column<Guid>(nullable: false),
+                    Title = table.Column<string>(maxLength: 50, nullable: false),
+                    Type = table.Column<int>(nullable: false),
+                    Currency = table.Column<int>(nullable: false),
+                    ExactAmount = table.Column<decimal>(name: "Exact Amount", type: "money", nullable: true),
+                    MinimumAmount = table.Column<decimal>(name: "Minimum Amount", type: "money", nullable: true),
+                    MaximumAmount = table.Column<decimal>(name: "Maximum Amount", type: "money", nullable: true),
+                    FrequencyRangeStart = table.Column<DateTime>(name: "Frequency Range Start", type: "smalldatetime", nullable: false),
+                    FrequencyRangeEnd = table.Column<DateTime>(name: "Frequency Range End", type: "smalldatetime", nullable: false),
+                    UserID = table.Column<string>(nullable: false),
+                    CategoryID = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Transactions", x => x.Id);
+                    table.PrimaryKey("PK_Transactions", x => x.TransactionID);
                     table.ForeignKey(
-                        name: "FK_Transactions_TransactionCategories_CategoryId",
-                        column: x => x.CategoryId,
+                        name: "FK_Transactions_Category",
+                        column: x => x.CategoryID,
                         principalTable: "TransactionCategories",
-                        principalColumn: "Id",
+                        principalColumn: "TransactionCategoryID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Transactions_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Transactions_User",
+                        column: x => x.UserID,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -236,32 +238,30 @@ namespace Persistence.Migrations
                 name: "TransactionAmountModifications",
                 columns: table => new
                 {
-                    TransactionId = table.Column<Guid>(nullable: false),
-                    AmountModificationId = table.Column<Guid>(nullable: false),
-                    TransactionId1 = table.Column<int>(nullable: true)
+                    TransactionID = table.Column<Guid>(nullable: false),
+                    AmountModificationID = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TransactionAmountModifications", x => new { x.TransactionId, x.AmountModificationId });
+                    table.PrimaryKey("PK_TransactionAmountModifications", x => new { x.TransactionID, x.AmountModificationID });
                     table.ForeignKey(
-                        name: "FK_TransactionAmountModifications_AmountModifications_AmountModificationId",
-                        column: x => x.AmountModificationId,
+                        name: "FK_TransactionAmountModifications_AmountModifications",
+                        column: x => x.AmountModificationID,
                         principalTable: "AmountModifications",
-                        principalColumn: "Id",
+                        principalColumn: "AmountModificationID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TransactionAmountModifications_Transactions_TransactionId1",
-                        column: x => x.TransactionId1,
+                        name: "FK_TransactionAmountModifications_Transactions",
+                        column: x => x.TransactionID,
                         principalTable: "Transactions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "TransactionID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AmountModifications_AmountModificationCategoryId",
+                name: "IX_AmountModifications_AmountModificationCategoryID",
                 table: "AmountModifications",
-                column: "AmountModificationCategoryId",
-                unique: true);
+                column: "AmountModificationCategoryID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -303,25 +303,19 @@ namespace Persistence.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TransactionAmountModifications_AmountModificationId",
+                name: "IX_TransactionAmountModifications_AmountModificationID",
                 table: "TransactionAmountModifications",
-                column: "AmountModificationId");
+                column: "AmountModificationID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TransactionAmountModifications_TransactionId1",
-                table: "TransactionAmountModifications",
-                column: "TransactionId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Transactions_CategoryId",
+                name: "IX_Transactions_CategoryID",
                 table: "Transactions",
-                column: "CategoryId",
-                unique: true);
+                column: "CategoryID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transactions_UserId",
+                name: "IX_Transactions_UserID",
                 table: "Transactions",
-                column: "UserId");
+                column: "UserID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

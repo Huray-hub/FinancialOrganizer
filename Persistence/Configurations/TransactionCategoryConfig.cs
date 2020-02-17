@@ -8,9 +8,9 @@ namespace Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<TransactionCategory> builder)
         {
-            builder.HasKey(tc => tc.Id);
-
-            builder.Property(tc => tc.Name).HasColumnType("varchar(50)").HasMaxLength(50).IsRequired();
+            builder.Property(tc => tc.TransactionCategoryId).HasColumnName("TransactionCategoryID");
+           
+            builder.Property(tc => tc.Name).HasMaxLength(50).IsRequired();
         }
     }
 }

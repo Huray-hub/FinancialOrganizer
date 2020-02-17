@@ -6,13 +6,14 @@ namespace Domain
 {
     public class AmountModification
     {
-        public Guid Id { get; set; }        
+        public Guid AmountModificationId { get; set; }
         public decimal Amount { get; set; }
-        public string Type { get; set; }
+        public int AmountType { get; set; }
+        public int AmountCalculationType { get; set; }
 
         public Guid AmountModificationCategoryId { get; set; }
         public AmountModificationCategory AmountModificationCategory { get; set; }
 
-        public IList<TransactionAmountModification> TransactionAmountModifications { get; set; }       
+        public IList<TransactionAmountModification> TransactionAmountModifications { get; set; }
     }  
 }

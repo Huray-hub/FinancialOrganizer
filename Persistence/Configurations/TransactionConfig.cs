@@ -8,29 +8,43 @@ namespace Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Transaction> builder)
         {
-            //Table Relationships
-            builder.HasKey(pk => pk.Id);
+            builder.Property(t => t.TransactionId).HasColumnName("TransactionID");
 
-            builder.HasOne(u => u.User).WithMany(t => t.Transactions).HasForeignKey(ui => ui.UserId).IsRequired();
+            builder.Property(t => t.UserId).HasColumnName("UserID");
 
-            builder.HasOne(tc => tc.Category).WithOne(tc => tc.Transaction).HasForeignKey<Transaction>(t => t.CategoryId);
+            builder.Property(t => t.CategoryId).HasColumnName("CategoryID");
 
-            //Table types etc
-            builder.Property(t => t.Title).HasColumnType("varchar(50)").HasMaxLength(50).IsRequired();
+            builder.HasOne(t => t.User)
+                .WithMany(u => u.Transactions)
+                .HasForeignKey(t => t.UserId)
+                .IsRequired()
+                .HasConstraintName("FK_Transactions_User");
 
-            builder.Property(t => t.Type).HasColumnType("varchar(50)").IsRequired();
+            builder.HasOne(t => t.Category)
+                .WithMany(tc => tc.Transactions)
+                .HasForeignKey(t => t.CategoryId)
+                .HasConstraintName("FK_Transactions_Category");
 
-            builder.Property(t => t.Currency).HasColumnType("varchar(50)").IsRequired();
+            builder.Property(t => t.Title).HasMaxLength(50).IsRequired();
 
-            builder.Property(t => t.ExactAmount).HasColumnType("Decimal(10,2)");
+            builder.Property(t => t.Type).IsRequired();
 
-            builder.Property(t => t.MinimumAmount).HasColumnType("Decimal(10,2)");
+            builder.Property(t => t.Currency).IsRequired();
 
-            builder.Property(t => t.MaximumAmount).HasColumnType("Decimal(10,2)");
+            builder.Property(t => t.ExactAmount).HasColumnName("Exact Amount").HasColumnType("money")
+                .HasDefaultValue(null);
 
-            builder.Property(t => t.FrequencyRangeStart).HasColumnType("smalldatetime").IsRequired();
+            builder.Property(t => t.MinimumAmount).HasColumnName("Minimum Amount").HasColumnType("money")
+                .HasDefaultValue(null);
 
-            builder.Property(t => t.FrequencyRangeEnd).HasColumnType("smalldatetime").IsRequired();
+            builder.Property(t => t.MaximumAmount).HasColumnName("Maximum Amount").HasColumnType("money")
+                .HasDefaultValue(null);
+
+            builder.Property(t => t.FrequencyRangeStart).HasColumnName("Frequency Range Start")
+                .HasColumnType("smalldatetime").IsRequired();
+
+            builder.Property(t => t.FrequencyRangeEnd).HasColumnName("Frequency Range End")
+                .HasColumnType("smalldatetime").IsRequired();
         }
     }
 }

@@ -8,14 +8,21 @@ namespace Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<AmountModification> builder)
         {
-            builder.HasKey(pk => pk.Id);
+            builder.Property(am => am.AmountModificationId).HasColumnName("AmountModificationID");
 
-            builder.HasOne(am => am.AmountModificationCategory).WithOne(mc => mc.AmountModification)
-                .HasForeignKey<AmountModification>(am => am.AmountModificationCategoryId);
+            builder.Property(am => am.AmountModificationCategoryId).HasColumnName("AmountModificationCategoryID");
 
-            builder.Property(am => am.Amount).HasColumnType("Decimal(10,2)").IsRequired();
+            builder.HasOne(am => am.AmountModificationCategory)
+                .WithMany(amc => amc.AmountModifications)
+                .HasForeignKey(am => am.AmountModificationCategoryId)
+                .HasConstraintName("FK_AmountModifications_AmountModificationCategory");
 
-            builder.Property(am => am.Type).HasColumnType("varchar(50)").IsRequired();
+            builder.Property(am => am.Amount).HasColumnType("money").IsRequired();
+
+            builder.Property(am => am.AmountType).HasColumnName("Amount Type").IsRequired();
+
+            builder.Property(am => am.AmountCalculationType).HasColumnName("Amount Calculation Type")
+                .HasDefaultValue(0).IsRequired();
         }
     }
 }

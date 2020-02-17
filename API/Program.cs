@@ -22,8 +22,9 @@ namespace API
                 try
                 {
                     var context = services.GetRequiredService<ApplicationDbContext>();
-                    //var userManager = services.GetRequiredService<UserManager<AppUser>>();
+                    var userManager = services.GetRequiredService<UserManager<AppUser>>();
                     context.Database.Migrate();
+                    ApplicationDbContextSeed.SeedAsync(context, userManager).Wait();
                 }
                 catch (Exception ex)
                 {

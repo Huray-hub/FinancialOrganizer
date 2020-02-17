@@ -3,17 +3,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200127024106_Initial")]
-    partial class Initial
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,36 +21,48 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.AmountModification", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("AmountModificationId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnName("AmountModificationID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("Decimal(10,2)");
+                        .HasColumnType("money");
+
+                    b.Property<int>("AmountCalculationType")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("Amount Calculation Type")
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<Guid>("AmountModificationCategoryId")
+                        .HasColumnName("AmountModificationCategoryID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.Property<int>("AmountType")
+                        .HasColumnName("Amount Type")
+                        .HasColumnType("int");
 
-                    b.HasIndex("AmountModificationCategoryId")
-                        .IsUnique();
+                    b.HasKey("AmountModificationId");
+
+                    b.HasIndex("AmountModificationCategoryId");
 
                     b.ToTable("AmountModifications");
                 });
 
             modelBuilder.Entity("Domain.AmountModificationCategory", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("AmountModificationCategoryId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnName("AmountModificationCategoryID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("varchar")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.HasKey("Id");
+                    b.HasKey("AmountModificationCategoryId");
 
                     b.ToTable("AmountModificationCategories");
                 });
@@ -71,7 +81,7 @@ namespace Persistence.Migrations
 
                     b.Property<string>("Country")
                         .IsRequired()
-                        .HasColumnType("varchar")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<DateTime>("DateOfBirth")
@@ -80,8 +90,8 @@ namespace Persistence.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("varchar")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
@@ -89,13 +99,13 @@ namespace Persistence.Migrations
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnName("First Name")
-                        .HasColumnType("varchar")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnName("Last Name")
-                        .HasColumnType("varchar")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<bool>("LockoutEnabled")
@@ -147,45 +157,60 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Transaction", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("TransactionId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("TransactionID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CategoryId")
+                        .HasColumnName("CategoryID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Currency")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("ExactAmount")
-                        .HasColumnType("Decimal(10,2)");
+                    b.Property<decimal?>("ExactAmount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("Exact Amount")
+                        .HasColumnType("money")
+                        .HasDefaultValue(null);
 
                     b.Property<DateTime>("FrequencyRangeEnd")
+                        .HasColumnName("Frequency Range End")
                         .HasColumnType("smalldatetime");
 
                     b.Property<DateTime>("FrequencyRangeStart")
+                        .HasColumnName("Frequency Range Start")
                         .HasColumnType("smalldatetime");
 
-                    b.Property<decimal>("MaximumAmount")
-                        .HasColumnType("Decimal(10,2)");
+                    b.Property<decimal?>("MaximumAmount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("Maximum Amount")
+                        .HasColumnType("money")
+                        .HasDefaultValue(null);
 
-                    b.Property<decimal>("MinimumAmount")
-                        .HasColumnType("Decimal(10,2)");
+                    b.Property<decimal?>("MinimumAmount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("Minimum Amount")
+                        .HasColumnType("money")
+                        .HasDefaultValue(null);
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("varchar")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .IsRequired()
+                        .HasColumnName("UserID")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                    b.HasKey("TransactionId");
 
-                    b.HasIndex("CategoryId")
-                        .IsUnique();
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("UserId");
 
@@ -195,35 +220,33 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.TransactionAmountModification", b =>
                 {
                     b.Property<Guid>("TransactionId")
+                        .HasColumnName("TransactionID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AmountModificationId")
+                        .HasColumnName("AmountModificationID")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("TransactionId1")
-                        .HasColumnType("int");
 
                     b.HasKey("TransactionId", "AmountModificationId");
 
                     b.HasIndex("AmountModificationId");
-
-                    b.HasIndex("TransactionId1");
 
                     b.ToTable("TransactionAmountModifications");
                 });
 
             modelBuilder.Entity("Domain.TransactionCategory", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("TransactionCategoryId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnName("TransactionCategoryID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.HasKey("Id");
+                    b.HasKey("TransactionCategoryId");
 
                     b.ToTable("TransactionCategories");
                 });
@@ -362,8 +385,9 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.AmountModification", b =>
                 {
                     b.HasOne("Domain.AmountModificationCategory", "AmountModificationCategory")
-                        .WithOne("AmountModification")
-                        .HasForeignKey("Domain.AmountModification", "AmountModificationCategoryId")
+                        .WithMany("AmountModifications")
+                        .HasForeignKey("AmountModificationCategoryId")
+                        .HasConstraintName("FK_AmountModifications_AmountModificationCategory")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -371,14 +395,16 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Transaction", b =>
                 {
                     b.HasOne("Domain.TransactionCategory", "Category")
-                        .WithOne("Transaction")
-                        .HasForeignKey("Domain.Transaction", "CategoryId")
+                        .WithMany("Transactions")
+                        .HasForeignKey("CategoryId")
+                        .HasConstraintName("FK_Transactions_Category")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.AppUser", "User")
                         .WithMany("Transactions")
                         .HasForeignKey("UserId")
+                        .HasConstraintName("FK_Transactions_User")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -388,12 +414,16 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.AmountModification", "AmountModification")
                         .WithMany("TransactionAmountModifications")
                         .HasForeignKey("AmountModificationId")
+                        .HasConstraintName("FK_TransactionAmountModifications_AmountModifications")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Transaction", "Transaction")
                         .WithMany("TransactionAmountModifications")
-                        .HasForeignKey("TransactionId1");
+                        .HasForeignKey("TransactionId")
+                        .HasConstraintName("FK_TransactionAmountModifications_Transactions")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

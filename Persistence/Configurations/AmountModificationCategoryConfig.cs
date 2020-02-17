@@ -1,6 +1,7 @@
 ﻿using Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 
 namespace Persistence.Configurations
 {
@@ -8,9 +9,9 @@ namespace Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<AmountModificationCategory> builder)
         {
-            builder.HasKey(amc => amc.Id);
+            builder.Property(amc => amc.AmountModificationCategoryId).HasColumnName("AmountModificationCategoryID");
 
-            builder.Property(amc => amc.Title).HasColumnType("varchar(50)").HasMaxLength(50).IsRequired();
+            builder.Property(amc => amc.Title).HasMaxLength(50).IsRequired();
         }
     }
 }
