@@ -4,6 +4,8 @@
     {
         Euro,
         Dollar,
-        Yen
+        Yen,
+        BritishPound,
+        Bitcoin
     }
 }

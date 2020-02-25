@@ -1,4 +1,4 @@
-﻿using Domain;
+﻿using Domain.Entities.Transaction;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -15,7 +15,8 @@ namespace Persistence.Configurations
             builder.HasOne(am => am.AmountModificationCategory)
                 .WithMany(amc => amc.AmountModifications)
                 .HasForeignKey(am => am.AmountModificationCategoryId)
-                .HasConstraintName("FK_AmountModifications_AmountModificationCategory");
+                .HasConstraintName("FK_AmountModifications_AmountModificationCategory")
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Property(am => am.Amount).HasColumnType("money").IsRequired();
 

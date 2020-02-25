@@ -1,4 +1,4 @@
-﻿using Domain;
+﻿using Domain.Entities.Transaction;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -18,12 +18,14 @@ namespace Persistence.Configurations
                 .WithMany(u => u.Transactions)
                 .HasForeignKey(t => t.UserId)
                 .IsRequired()
-                .HasConstraintName("FK_Transactions_User");
+                .HasConstraintName("FK_Transactions_User")
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(t => t.Category)
                 .WithMany(tc => tc.Transactions)
                 .HasForeignKey(t => t.CategoryId)
-                .HasConstraintName("FK_Transactions_Category");
+                .HasConstraintName("FK_Transactions_Category")
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Property(t => t.Title).HasMaxLength(50).IsRequired();
 
@@ -31,20 +33,7 @@ namespace Persistence.Configurations
 
             builder.Property(t => t.Currency).IsRequired();
 
-            builder.Property(t => t.ExactAmount).HasColumnName("Exact Amount").HasColumnType("money")
-                .HasDefaultValue(null);
-
-            builder.Property(t => t.MinimumAmount).HasColumnName("Minimum Amount").HasColumnType("money")
-                .HasDefaultValue(null);
-
-            builder.Property(t => t.MaximumAmount).HasColumnName("Maximum Amount").HasColumnType("money")
-                .HasDefaultValue(null);
-
-            builder.Property(t => t.FrequencyRangeStart).HasColumnName("Frequency Range Start")
-                .HasColumnType("smalldatetime").IsRequired();
-
-            builder.Property(t => t.FrequencyRangeEnd).HasColumnName("Frequency Range End")
-                .HasColumnType("smalldatetime").IsRequired();
+            builder.Property(t => t.IsRecurrent).HasDefaultValue(false).IsRequired();
         }
     }
 }

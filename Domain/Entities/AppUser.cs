@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Domain.Entities.Transaction;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 

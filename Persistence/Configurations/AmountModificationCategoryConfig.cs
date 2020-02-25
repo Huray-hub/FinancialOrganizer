@@ -1,7 +1,6 @@
-﻿using Domain;
+﻿using Domain.Entities.Transaction;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
 
 namespace Persistence.Configurations
 {
@@ -11,7 +10,7 @@ namespace Persistence.Configurations
         {
             builder.Property(amc => amc.AmountModificationCategoryId).HasColumnName("AmountModificationCategoryID");
 
-            builder.Property(amc => amc.Title).HasMaxLength(50).IsRequired();
+            builder.Property(amc => amc.Title).HasMaxLength(50).IsRequired();         
         }
     }
 }
