@@ -1,5 +1,4 @@
-﻿using Domain;
-using Domain.Entities.Transaction;
+﻿using Domain.Entities.Transaction;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

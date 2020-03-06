@@ -8,6 +8,8 @@ namespace Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Transaction> builder)
         {
+            builder.HasKey(t => t.TransactionId).IsClustered();
+
             builder.Property(t => t.TransactionId).HasColumnName("TransactionID");
 
             builder.Property(t => t.UserId).HasColumnName("UserID");

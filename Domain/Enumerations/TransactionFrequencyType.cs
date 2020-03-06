@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Domain.Enumerations
+﻿namespace Domain.Enumerations
 {
     public enum TransactionFrequencyType
     {

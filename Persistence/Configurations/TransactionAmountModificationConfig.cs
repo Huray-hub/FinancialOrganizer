@@ -17,7 +17,7 @@ namespace Persistence.Configurations
             builder.HasOne(tam => tam.TransactionAmount)
                 .WithMany(t => t.TransactionAmountModifications)
                 .HasForeignKey(tam => tam.TransactionAmountId)
-                .HasConstraintName("FK_TransactionAmountModifications_TransactionsAmounts")
+                .HasConstraintName("FK_TransactionAmountModifications_TransactionAmounts")
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(tam => tam.AmountModification)

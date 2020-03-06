@@ -5,9 +5,14 @@ namespace Domain.Entities.Transaction
 {
     public class TransactionCategory
     {
-        public Guid TransactionCategoryId { get; set; }
+        public TransactionCategory()
+        {
+            Transactions = new HashSet<Transaction>();
+        }
+
+        public int TransactionCategoryId { get; set; }
         public string Name { get; set; }
 
-        public ICollection<Transaction> Transactions { get; set; }
+        public ICollection<Transaction> Transactions { get; private set; }
     }
 }

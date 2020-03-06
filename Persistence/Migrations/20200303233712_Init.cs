@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Persistence.Migrations
 {
-    public partial class InitialDb : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,7 +11,8 @@ namespace Persistence.Migrations
                 name: "AmountModificationCategories",
                 columns: table => new
                 {
-                    AmountModificationCategoryID = table.Column<Guid>(nullable: false),
+                    AmountModificationCategoryID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>
@@ -66,7 +67,8 @@ namespace Persistence.Migrations
                 name: "TransactionCategories",
                 columns: table => new
                 {
-                    TransactionCategoryID = table.Column<Guid>(nullable: false),
+                    TransactionCategoryID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>
@@ -78,11 +80,12 @@ namespace Persistence.Migrations
                 name: "AmountModifications",
                 columns: table => new
                 {
-                    AmountModificationID = table.Column<Guid>(nullable: false),
+                    AmountModificationID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Amount = table.Column<decimal>(type: "money", nullable: false),
                     AmountType = table.Column<int>(name: "Amount Type", nullable: false),
                     AmountCalculationType = table.Column<int>(name: "Amount Calculation Type", nullable: false, defaultValue: 0),
-                    AmountModificationCategoryID = table.Column<Guid>(nullable: false)
+                    AmountModificationCategoryID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -205,17 +208,19 @@ namespace Persistence.Migrations
                 name: "Transactions",
                 columns: table => new
                 {
-                    TransactionID = table.Column<Guid>(nullable: false),
+                    TransactionID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(maxLength: 50, nullable: false),
                     Type = table.Column<int>(nullable: false),
                     Currency = table.Column<int>(nullable: false),
                     IsRecurrent = table.Column<bool>(nullable: false, defaultValue: false),
                     UserID = table.Column<string>(nullable: false),
-                    CategoryID = table.Column<Guid>(nullable: false)
+                    CategoryID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Transactions", x => x.TransactionID);
+                    table.PrimaryKey("PK_Transactions", x => x.TransactionID)
+                        .Annotation("SqlServer:Clustered", true);
                     table.ForeignKey(
                         name: "FK_Transactions_Category",
                         column: x => x.CategoryID,
@@ -234,17 +239,18 @@ namespace Persistence.Migrations
                 name: "TransactionAmounts",
                 columns: table => new
                 {
-                    TransactionAmountID = table.Column<Guid>(nullable: false),
+                    TransactionAmountID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Amount = table.Column<decimal>(type: "money", nullable: false),
-                    MaxAmount = table.Column<decimal>(type: "money", nullable: false),
+                    MaxAmount = table.Column<decimal>(name: "Max Amount", type: "money", nullable: true),
                     TriggerDate = table.Column<DateTime>(name: "Trigger Date", type: "smalldatetime", nullable: false),
-                    TransactionId = table.Column<Guid>(nullable: false)
+                    TransactionId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TransactionAmounts", x => x.TransactionAmountID);
                     table.ForeignKey(
-                        name: "FK_TransactionAmounts_Transactions",
+                        name: "FK_TransactionAmount_Transaction",
                         column: x => x.TransactionId,
                         principalTable: "Transactions",
                         principalColumn: "TransactionID",
@@ -255,8 +261,8 @@ namespace Persistence.Migrations
                 name: "TransactionAmountModifications",
                 columns: table => new
                 {
-                    TransactionAmountID = table.Column<Guid>(nullable: false),
-                    AmountModificationID = table.Column<Guid>(nullable: false)
+                    TransactionAmountID = table.Column<int>(nullable: false),
+                    AmountModificationID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -268,7 +274,7 @@ namespace Persistence.Migrations
                         principalColumn: "AmountModificationID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TransactionAmountModifications_TransactionsAmounts",
+                        name: "FK_TransactionAmountModifications_TransactionAmounts",
                         column: x => x.TransactionAmountID,
                         principalTable: "TransactionAmounts",
                         principalColumn: "TransactionAmountID",
@@ -279,21 +285,109 @@ namespace Persistence.Migrations
                 name: "TransactionRecurrencies",
                 columns: table => new
                 {
-                    TransactionRecurrencyID = table.Column<Guid>(nullable: false),
-                    Installment = table.Column<decimal>(type: "money", nullable: false),
-                    InstallmentsNumber = table.Column<int>(name: "Installments Number", nullable: false),
+                    TransactionRecurrencyID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    HasLimitations = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     FrequencyType = table.Column<int>(name: "Frequency Type", nullable: false),
-                    EndDate = table.Column<DateTime>(name: "End Date", type: "smalldatetime", nullable: false),
-                    TransactionAmountId = table.Column<Guid>(nullable: false)
+                    TransactionAmountId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TransactionRecurrencies", x => x.TransactionRecurrencyID);
                     table.ForeignKey(
-                        name: "FK_TransactionRecurrencies_TransactionAmounts",
-                        column: x => x.TransactionRecurrencyID,
+                        name: "FK_TransactionRecurrency_TransactionAmount",
+                        column: x => x.TransactionAmountId,
                         principalTable: "TransactionAmounts",
                         principalColumn: "TransactionAmountID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RecurrentTransactionCustomFrequencies",
+                columns: table => new
+                {
+                    RecurrentTransactionCustomFrequencyID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TimeUnit = table.Column<int>(name: "Time Unit", nullable: false),
+                    TimeUnitQuantity = table.Column<int>(name: "Time Unit Quantity", nullable: false),
+                    TransactionRecurrencyId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecurrentTransactionCustomFrequencies", x => x.RecurrentTransactionCustomFrequencyID);
+                    table.ForeignKey(
+                        name: "FK_RecurrentTransactionCustomFrequency_TransactionRecurrency",
+                        column: x => x.TransactionRecurrencyId,
+                        principalTable: "TransactionRecurrencies",
+                        principalColumn: "TransactionRecurrencyID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RecurrentTransactionInfo",
+                columns: table => new
+                {
+                    RecurrentTransactionInfoID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CurrentTransaction = table.Column<int>(nullable: false),
+                    CurrentTriggerDate = table.Column<DateTime>(nullable: false),
+                    TransactionRecurrencyId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecurrentTransactionInfo", x => x.RecurrentTransactionInfoID);
+                    table.ForeignKey(
+                        name: "FK_RecurrentTransactionInfo_TransactionRecurrency",
+                        column: x => x.TransactionRecurrencyId,
+                        principalTable: "TransactionRecurrencies",
+                        principalColumn: "TransactionRecurrencyID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RecurrentTransactionLimitations",
+                columns: table => new
+                {
+                    RecurrentTransactionLimitationID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RecurrencyNumber = table.Column<int>(name: "Recurrency Number", nullable: false),
+                    EndDate = table.Column<DateTime>(name: "End Date", type: "smalldatetime", nullable: false),
+                    SumAmount = table.Column<decimal>(name: "Sum Amount", nullable: false),
+                    MaxSumAmount = table.Column<decimal>(name: "Max Sum Amount", nullable: true),
+                    TransactionRecurrencyId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecurrentTransactionLimitations", x => x.RecurrentTransactionLimitationID);
+                    table.ForeignKey(
+                        name: "FK_RecurrentTransactionLimitation_TransactionRecurrency",
+                        column: x => x.TransactionRecurrencyId,
+                        principalTable: "TransactionRecurrencies",
+                        principalColumn: "TransactionRecurrencyID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RecurrentTransactionSumAmountModifications",
+                columns: table => new
+                {
+                    RecurrentTransactionLimitationID = table.Column<int>(nullable: false),
+                    AmountModificationID = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecurrentTransactionSumAmountModifications", x => new { x.RecurrentTransactionLimitationID, x.AmountModificationID });
+                    table.ForeignKey(
+                        name: "FK_RecurrentTransactionSumAmountModifications_AmountModifications",
+                        column: x => x.AmountModificationID,
+                        principalTable: "AmountModifications",
+                        principalColumn: "AmountModificationID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RecurrentTransactionSumAmountModifications_RecurrentTransactionLimitations",
+                        column: x => x.RecurrentTransactionLimitationID,
+                        principalTable: "RecurrentTransactionLimitations",
+                        principalColumn: "RecurrentTransactionLimitationID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -342,6 +436,28 @@ namespace Persistence.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RecurrentTransactionCustomFrequencies_TransactionRecurrencyId",
+                table: "RecurrentTransactionCustomFrequencies",
+                column: "TransactionRecurrencyId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecurrentTransactionInfo_TransactionRecurrencyId",
+                table: "RecurrentTransactionInfo",
+                column: "TransactionRecurrencyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecurrentTransactionLimitations_TransactionRecurrencyId",
+                table: "RecurrentTransactionLimitations",
+                column: "TransactionRecurrencyId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecurrentTransactionSumAmountModifications_AmountModificationID",
+                table: "RecurrentTransactionSumAmountModifications",
+                column: "AmountModificationID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TransactionAmountModifications_AmountModificationID",
                 table: "TransactionAmountModifications",
                 column: "AmountModificationID");
@@ -350,6 +466,12 @@ namespace Persistence.Migrations
                 name: "IX_TransactionAmounts_TransactionId",
                 table: "TransactionAmounts",
                 column: "TransactionId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TransactionRecurrencies_TransactionAmountId",
+                table: "TransactionRecurrencies",
+                column: "TransactionAmountId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -381,22 +503,34 @@ namespace Persistence.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "TransactionAmountModifications");
+                name: "RecurrentTransactionCustomFrequencies");
 
             migrationBuilder.DropTable(
-                name: "TransactionRecurrencies");
+                name: "RecurrentTransactionInfo");
+
+            migrationBuilder.DropTable(
+                name: "RecurrentTransactionSumAmountModifications");
+
+            migrationBuilder.DropTable(
+                name: "TransactionAmountModifications");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "RecurrentTransactionLimitations");
+
+            migrationBuilder.DropTable(
                 name: "AmountModifications");
 
             migrationBuilder.DropTable(
-                name: "TransactionAmounts");
+                name: "TransactionRecurrencies");
 
             migrationBuilder.DropTable(
                 name: "AmountModificationCategories");
+
+            migrationBuilder.DropTable(
+                name: "TransactionAmounts");
 
             migrationBuilder.DropTable(
                 name: "Transactions");

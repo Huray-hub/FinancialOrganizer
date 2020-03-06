@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Domain.Enumerations
+﻿namespace Domain.Enumerations
 {
-    public class AmountModificationCalculationType
+    public enum CalculationType
     {
-        public enum CalculationType
-        {
-            FlatAmount,
-            Percentage
-        }
+        FlatAmount,
+        Percentage
     }
 }

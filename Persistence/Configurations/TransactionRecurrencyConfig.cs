@@ -10,18 +10,14 @@ namespace Persistence.Configurations
         {
             builder.Property(tr => tr.TransactionRecurrencyId).HasColumnName("TransactionRecurrencyID");
 
-            builder.Property(tr => tr.Installment).HasColumnType("money").IsRequired();
-
-            builder.Property(tr => tr.InstallmentsNumber).HasColumnName("Installments Number").IsRequired();
+            builder.Property(tr => tr.HasLimitations).HasColumnType("bit").HasDefaultValue(false).IsRequired();
 
             builder.Property(tr => tr.FrequencyType).HasColumnName("Frequency Type").IsRequired();
 
-            builder.Property(tr => tr.EndDate).HasColumnName("End Date").HasColumnType("smalldatetime");
-
             builder.HasOne(tr => tr.TransactionAmount)
                 .WithOne(ta => ta.TransactionRecurrency)
-                .HasForeignKey<TransactionRecurrency>(tr => tr.TransactionRecurrencyId)
-                .HasConstraintName("FK_TransactionRecurrencies_TransactionAmounts")
+                .HasForeignKey<TransactionRecurrency>(tr => tr.TransactionAmountId)
+                .HasConstraintName("FK_TransactionRecurrency_TransactionAmount")
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

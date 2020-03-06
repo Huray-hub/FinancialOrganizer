@@ -12,15 +12,15 @@ namespace Persistence.Configurations
 
             builder.Property(ta => ta.Amount).HasColumnType("money").IsRequired();
 
-            builder.Property(ta => ta.MaxAmount).HasColumnType("money").IsRequired();
+            builder.Property(ta => ta.MaxAmount).HasColumnName("Max Amount").HasColumnType("money").IsRequired(false);
 
             builder.Property(ta => ta.TriggerDate).HasColumnName("Trigger Date").HasColumnType("smalldatetime").IsRequired();
 
             builder.HasOne(ta => ta.Transaction)
                 .WithOne(t => t.TransactionAmount)
                 .HasForeignKey<TransactionAmount>(ta => ta.TransactionId)
-                .HasConstraintName("FK_TransactionAmounts_Transactions")
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasConstraintName("FK_TransactionAmount_Transaction")
+                .OnDelete(DeleteBehavior.Cascade);            
         }
     }
 }

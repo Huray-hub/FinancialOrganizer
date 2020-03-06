@@ -5,16 +5,20 @@ namespace Domain.Entities.Transaction
 {
     public class TransactionAmount
     {
-        public Guid TransactionAmountId { get; set; }
+        public TransactionAmount()
+        {
+            TransactionAmountModifications = new HashSet<TransactionAmountModification>();
+        }
+
+        public int TransactionAmountId { get; set; }
         public decimal Amount { get; set; }
-        public decimal MaxAmount { get; set; }
+        public decimal? MaxAmount { get; set; }
         public DateTime TriggerDate { get; set; }
 
-        public Guid TransactionId { get; set; }
+        public int TransactionId { get; set; }
         public Transaction Transaction { get; set; }
 
-        public IList<TransactionAmountModification> TransactionAmountModifications { get; set; }
-      
+        public ICollection<TransactionAmountModification> TransactionAmountModifications { get; private set; }    
         public TransactionRecurrency TransactionRecurrency { get; set; }      
     }
 }
