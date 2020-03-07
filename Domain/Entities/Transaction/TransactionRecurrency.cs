@@ -7,19 +7,18 @@ namespace Domain.Entities.Transaction
     {
         public TransactionRecurrency()
         {
-            RecurrentTransactionInfo = new HashSet<RecurrentTransactionInfo>();
+            RecurrentTransactionInstallments = new HashSet<RecurrentTransactionInstallment>();
         }
 
         public int TransactionRecurrencyId { get; set; }
         public bool HasLimitations { get; set; }
         public int FrequencyType { get; set; }
       
+        public int TransactionId { get; set; }
 
-        public int TransactionAmountId { get; set; }
-        public TransactionAmount TransactionAmount { get; set; }
-
+        public Transaction Transaction { get; set; }
         public RecurrentTransactionLimitation RecurrentTransactionLimitation { get; set; }
-        public ICollection<RecurrentTransactionInfo> RecurrentTransactionInfo{ get; private set; }
+        public ICollection<RecurrentTransactionInstallment> RecurrentTransactionInstallments { get; private set; }
         public RecurrentTransactionCustomFrequency RecurrentTransactionCustomFrequency { get; set; }
     }
 }

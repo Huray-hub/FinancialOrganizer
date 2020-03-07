@@ -10,13 +10,7 @@ namespace Persistence.Configurations
         {
             builder.Property(am => am.AmountModificationId).HasColumnName("AmountModificationID");
 
-            builder.Property(am => am.AmountModificationCategoryId).HasColumnName("AmountModificationCategoryID");
-
-            builder.HasOne(am => am.AmountModificationCategory)
-                .WithMany(amc => amc.AmountModifications)
-                .HasForeignKey(am => am.AmountModificationCategoryId)
-                .HasConstraintName("FK_AmountModifications_AmountModificationCategory")
-                .OnDelete(DeleteBehavior.Restrict);
+            builder.Property(am => am.Title).HasMaxLength(50).IsRequired();
 
             builder.Property(am => am.Amount).HasColumnType("money").IsRequired();
 

@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Repositories\BaseRepository.cs~RF2e6ed079.TMP" />
+    <None Remove="Repositorie\BaseRepository.cs~RF2e6ed079.TMP" />
   </ItemGroup>
 
   <ItemGroup>

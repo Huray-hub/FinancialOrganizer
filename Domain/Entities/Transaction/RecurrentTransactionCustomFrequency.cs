@@ -7,6 +7,7 @@
         public int TimeUnitQuantity { get; set; }
 
         public int TransactionRecurrencyId { get; set; }
+
         public TransactionRecurrency TransactionRecurrency { get; set; }
     }
 }

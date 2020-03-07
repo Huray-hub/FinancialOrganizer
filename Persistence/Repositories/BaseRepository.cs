@@ -1,12 +1,11 @@
-﻿using Domain;
-using Microsoft.EntityFrameworkCore;
-using Persistence;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Application.Interfaces;
 
-namespace Infrastructure.Repositories
+namespace Persistence.Repositories
 {
     public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {

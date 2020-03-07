@@ -26,7 +26,7 @@ namespace API
         {
             
             services.AddPersistence(Configuration);
-            services.AddInfrastructure();
+            //services.AddInfrastructure();
             //services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddControllers();

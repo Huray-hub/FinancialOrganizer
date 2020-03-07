@@ -10,7 +10,7 @@ namespace Persistence.Configurations
         {
             builder.Property(rtl => rtl.RecurrentTransactionLimitationId).HasColumnName("RecurrentTransactionLimitationID");
 
-            builder.Property(rtl => rtl.RecurrencyNumber).HasColumnName("Recurrency Number").IsRequired();
+            builder.Property(rtl => rtl.SumInstallments).HasColumnName("Sum Installments").IsRequired();
 
             builder.Property(rtl => rtl.EndDate).HasColumnName("End Date").HasColumnType("smalldatetime").IsRequired();
 

@@ -34,6 +34,12 @@ namespace Persistence.Configurations
             builder.Property(t => t.Type).IsRequired();
 
             builder.Property(t => t.Currency).IsRequired();
+           
+            builder.Property(t => t.Amount).HasColumnType("money").IsRequired();
+
+            builder.Property(t => t.MaxAmount).HasColumnName("Max Amount").HasColumnType("money").IsRequired(false);
+
+            builder.Property(t => t.TriggerDate).HasColumnName("Trigger Date").HasColumnType("smalldatetime").IsRequired();
 
             builder.Property(t => t.IsRecurrent).HasDefaultValue(false).IsRequired();
         }

@@ -14,10 +14,10 @@ namespace Persistence.Configurations
 
             builder.Property(tr => tr.FrequencyType).HasColumnName("Frequency Type").IsRequired();
 
-            builder.HasOne(tr => tr.TransactionAmount)
+            builder.HasOne(tr => tr.Transaction)
                 .WithOne(ta => ta.TransactionRecurrency)
-                .HasForeignKey<TransactionRecurrency>(tr => tr.TransactionAmountId)
-                .HasConstraintName("FK_TransactionRecurrency_TransactionAmount")
+                .HasForeignKey<TransactionRecurrency>(tr => tr.TransactionId)
+                .HasConstraintName("FK_TransactionRecurrency_Transaction")
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
