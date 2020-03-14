@@ -1,12 +1,11 @@
-﻿using Domain;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Persistence.Configurations
+namespace Infrastructure.Identity
 {
-    public class AppUserConfig : IEntityTypeConfiguration<AppUser>
+    public class ApplicationUserConfig : IEntityTypeConfiguration<ApplicationUser>
     {
-        public void Configure(EntityTypeBuilder<AppUser> builder)
+        public void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
             builder.Property(u => u.FirstName).HasColumnName("First Name").HasMaxLength(50).IsRequired();
 
@@ -21,4 +20,5 @@ namespace Persistence.Configurations
             builder.Property(u => u.PasswordHash).IsRequired();
         }
     }
+    
 }

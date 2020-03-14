@@ -1,5 +1,6 @@
 using System;
 using Domain;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -21,10 +22,15 @@ namespace API
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var context = services.GetRequiredService<ApplicationDbContext>();
-                    var userManager = services.GetRequiredService<UserManager<AppUser>>();
-                    context.Database.Migrate();
-                    ApplicationDbContextSeed.SeedAsync(context, userManager).Wait();
+                    var identityContext = services.GetRequiredService<ApplicationDbContext>();
+                    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                    identityContext.Database.Migrate();
+
+                    var financialOrganizerContext = services.GetRequiredService<FinancialOrganizerDbContext>();
+                    financialOrganizerContext.Database.Migrate();
+
+                    ApplicationDbContextSeed.SeedAsync(userManager).Wait();
+                    FinancialOrganizerDbContextSeed.SeedAsync(financialOrganizerContext).Wait();
                 }
                 catch (Exception ex)
                 {

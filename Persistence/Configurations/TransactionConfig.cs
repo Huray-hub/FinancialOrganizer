@@ -1,6 +1,7 @@
 ﻿using Domain.Entities.Transaction;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 
 namespace Persistence.Configurations
 {
@@ -12,16 +13,7 @@ namespace Persistence.Configurations
 
             builder.Property(t => t.TransactionId).HasColumnName("TransactionID");
 
-            builder.Property(t => t.UserId).HasColumnName("UserID");
-
             builder.Property(t => t.CategoryId).HasColumnName("CategoryID");
-
-            builder.HasOne(t => t.User)
-                .WithMany(u => u.Transactions)
-                .HasForeignKey(t => t.UserId)
-                .IsRequired()
-                .HasConstraintName("FK_Transactions_User")
-                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(t => t.Category)
                 .WithMany(tc => tc.Transactions)
@@ -42,6 +34,15 @@ namespace Persistence.Configurations
             builder.Property(t => t.TriggerDate).HasColumnName("Trigger Date").HasColumnType("smalldatetime").IsRequired();
 
             builder.Property(t => t.IsRecurrent).HasDefaultValue(false).IsRequired();
+
+
+            builder.Property(t => t.CreatedByUserId).IsRequired();
+
+            builder.Property(t => t.CreatedAt).HasColumnType("smalldatetime").HasDefaultValue(DateTime.Now).IsRequired();
+
+            builder.Property(t => t.LastModifiedByUserId).IsRequired(false);
+
+            builder.Property(t => t.LastModifiedAt).HasColumnType("smalldatetime").IsRequired(false);
         }
     }
 }

@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Domain.Common;
+using System;
 using System.Collections.Generic;
 
 namespace Domain.Entities.Transaction
 {
-    public class Transaction
+    public class Transaction : AuditedEntity
     {
         public Transaction()
         {
@@ -20,10 +21,10 @@ namespace Domain.Entities.Transaction
         public DateTime TriggerDate { get; set; }
         public bool IsRecurrent { get; set; }
 
-        public string UserId { get; set; }       
+        //public string UserId { get; set; }       
         public int CategoryId { get; set; }
 
-        public AppUser User { get; set; }
+        //public ApplicationUser User { get; set; }
         public TransactionCategory Category { get; set; }
         public ICollection<TransactionAmountModification> TransactionAmountModifications { get; private set; }
         public TransactionRecurrency TransactionRecurrency { get; set; }    

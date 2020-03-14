@@ -1,5 +1,4 @@
-﻿using Application;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
@@ -8,10 +7,6 @@ namespace API.Controllers
     [Route("[controller]")]
     public class TransactionsController : ControllerBase
     {
-       
-     
-
-
         
     }
 }
