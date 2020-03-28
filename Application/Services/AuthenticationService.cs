@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Interfaces
+namespace Application.Services
 {
-    interface IJwtGenerator
+    public class AuthenticationService
     {
+
     }
 }

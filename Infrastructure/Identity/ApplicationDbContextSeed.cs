@@ -60,6 +60,7 @@ namespace Infrastructure.Identity
                 foreach (var user in users)
                 {
                     await userManager.CreateAsync(user, "Ab123456!");
+                    await userManager.AddToRoleAsync(user, "User");
                 }
             }
         }

@@ -12,4 +12,8 @@
     <Folder Include="Interfaces\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="9.0.0-preview3" />
+  </ItemGroup>
+
 </Project>
