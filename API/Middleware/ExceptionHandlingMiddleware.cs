@@ -42,7 +42,6 @@ namespace API.Middleware
                     code = HttpStatusCode.BadRequest;
                     result = badRequestException.Message;
                     break;
-
                 case NotFoundException _:
                     code = HttpStatusCode.NotFound;
                     break;

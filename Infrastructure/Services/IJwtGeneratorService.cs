@@ -5,6 +5,6 @@ namespace Infrastructure
 {
     public interface IJwtTokenGeneratorService
     {
-        public string CreateToken(ApplicationUser user, IdentityRole role);
+        public string CreateToken(ApplicationUser user, string roleName);
     }
 }

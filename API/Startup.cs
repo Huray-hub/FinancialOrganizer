@@ -1,4 +1,5 @@
 using API.Middleware;
+using Application;
 using Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,7 +26,8 @@ namespace API
         {
             services.AddInfrastructure(Configuration);
             services.AddPersistence(Configuration);
-                      
+            services.AddApplication(); 
+            
             services.AddControllers();
         }
 
@@ -44,13 +46,10 @@ namespace API
             app.UseRouting();
 
             app.UseAuthentication();
-
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => 
+                endpoints.MapControllers());        
         }
     }
 }

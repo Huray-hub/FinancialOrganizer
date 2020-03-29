@@ -24,12 +24,13 @@ namespace API
                 {
                     var identityContext = services.GetRequiredService<ApplicationDbContext>();
                     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                    var roleManager = services.GetRequiredService<RoleManager<ApplicationRole>>();
                     identityContext.Database.Migrate();
 
                     var financialOrganizerContext = services.GetRequiredService<FinancialOrganizerDbContext>();
                     financialOrganizerContext.Database.Migrate();
 
-                    ApplicationDbContextSeed.SeedAsync(userManager).Wait();
+                    ApplicationDbContextSeed.SeedAsync(userManager, roleManager).Wait();
                     FinancialOrganizerDbContextSeed.SeedAsync(financialOrganizerContext).Wait();
                 }
                 catch (Exception ex)

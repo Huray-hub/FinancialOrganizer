@@ -1,22 +1,16 @@
-﻿using Application.Services;
+﻿using Application.Models;
+using Application.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    public class AuthenticationController : ControllerBase
+    public class AuthenticationController : MediatorBaseController
     {
-        private readonly IAuthenticationService _authenticationService;
-
-        public AuthenticationController(IAuthenticationService authenticationService)
-        {
-            _authenticationService = authenticationService;
-        }
-
-        public async Task<IActionResult> Register() =>
-            await _authenticationService;
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<ActionResult<UserObject>> Register(RegisterCommand command) =>
+            await Mediator.Send(command);
     }
 }
