@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Application.User
 {
-    public class RegisterCommand : IRequest<UserObject>
+    public class RegisterCommand : IRequest<LoggedUserModel>
     {
         public string Email { get; set; }
         public string FirstName { get; set; }
@@ -38,14 +38,14 @@ namespace Application.User
         }
     }
 
-    public class Handler : IRequestHandler<RegisterCommand, UserObject>
+    public class RegisterCommandHandler : IRequestHandler<RegisterCommand, LoggedUserModel>
     {
         private readonly IUserManagerService _userManagerService;
 
-        public Handler(IUserManagerService userManagerService) =>      
+        public RegisterCommandHandler(IUserManagerService userManagerService) =>      
             _userManagerService = userManagerService;
         
-        public async Task<UserObject> Handle(RegisterCommand request, CancellationToken cancellationToken) =>
+        public async Task<LoggedUserModel> Handle(RegisterCommand request, CancellationToken cancellationToken) =>
             await _userManagerService.Register(request);     
     }
 }

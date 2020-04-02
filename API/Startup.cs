@@ -1,8 +1,10 @@
 using API.Middleware;
 using Application;
 using Infrastructure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,9 +28,13 @@ namespace API
         {
             services.AddInfrastructure(Configuration);
             services.AddPersistence(Configuration);
-            services.AddApplication(); 
-            
-            services.AddControllers();
+            services.AddApplication();
+
+            services.AddControllers(option =>
+            {
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                option.Filters.Add(new AuthorizeFilter(policy));
+            });           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

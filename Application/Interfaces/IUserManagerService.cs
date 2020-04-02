@@ -6,10 +6,8 @@ namespace Application.Interfaces
 {
     public interface IUserManagerService
     {
-        Task<UserObject> Register(RegisterCommand request);
-
-        Task Login(string userName, string password);
-
-        string GetCurrentUsername();
+        Task<LoggedUserModel> GetCurrentUser();      
+        Task<LoggedUserModel> Login(LoginQuery request);
+        Task<LoggedUserModel> Register(RegisterCommand request);
     }
 }

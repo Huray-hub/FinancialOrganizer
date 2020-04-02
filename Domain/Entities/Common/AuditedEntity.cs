@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Domain.Common
+namespace Domain.Entities.Common
 {
     public class AuditedEntity
     {

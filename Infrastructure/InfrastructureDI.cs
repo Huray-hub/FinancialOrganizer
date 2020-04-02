@@ -52,6 +52,8 @@ namespace Infrastructure
                     };
                 });
 
+            services.AddAuthorization();
+
             return services;
         }
     }
