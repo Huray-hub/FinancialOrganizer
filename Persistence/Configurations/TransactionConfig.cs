@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
+using System.Linq;
 
 namespace Persistence.Configurations
 {
@@ -9,11 +10,9 @@ namespace Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Transaction> builder)
         {
-            builder.HasKey(t => t.TransactionId).IsClustered();
+            builder.ToTable("Transactions");
 
-            builder.Property(t => t.TransactionId).HasColumnName("TransactionID");
-
-            builder.Property(t => t.CategoryId).HasColumnName("CategoryID");
+            builder.HasKey(t => t.Id);
 
             builder.HasOne(t => t.Category)
                 .WithMany(tc => tc.Transactions)
@@ -21,6 +20,7 @@ namespace Persistence.Configurations
                 .HasConstraintName("FK_Transactions_Category")
                 .OnDelete(DeleteBehavior.Restrict);
 
+            #region Properties
             builder.Property(t => t.Title).HasMaxLength(50).IsRequired();
 
             builder.Property(t => t.Type).IsRequired();
@@ -43,6 +43,22 @@ namespace Persistence.Configurations
             builder.Property(t => t.LastModifiedByUserId).IsRequired(false);
 
             builder.Property(t => t.LastModifiedAt).HasColumnType("smalldatetime").IsRequired(false);
+            #endregion
         }
+
+        public static IQueryable<Transaction> IncludeNavigationProperties(IQueryable<Transaction> query) =>
+            query.Include(x => x.TransactionAmountModifications)
+                    .ThenInclude(x => x.AmountModification)
+                .Include(x => x.TransactionRecurrency)
+                .Include(x => x.Category)
+                .Include(x => x.TransactionRecurrency)
+                    .ThenInclude(x => x.RecurrentTransactionLimitation)
+                    .ThenInclude(x => x.RecurrentTransactionSumAmountModifications)
+                    .ThenInclude(x => x.AmountModification)
+                .Include(x => x.TransactionRecurrency)
+                    .ThenInclude(x => x.RecurrentTransactionInstallments)
+                .Include(x => x.TransactionRecurrency)
+                    .ThenInclude(x => x.RecurrentTransactionCustomFrequency);
+
     }
 }

@@ -2,9 +2,8 @@
 
 namespace Domain.Entities.Transaction
 {
-    public class RecurrentTransactionInstallment
+    public class RecurrentTransactionInstallment : BaseEntity
     {
-        public int RecurrentTransactionInstallmentId { get; set; }
         public int CurrentInstallment { get; set; }
         public DateTime InstallmentTriggerDate { get; set; }
 

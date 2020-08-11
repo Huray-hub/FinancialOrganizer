@@ -11,12 +11,14 @@ namespace Persistence
     {
         public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<FinancialOrganizerDbContext>(options =>
+            services.AddDbContext<FODbContext>(options =>
                 options.UseSqlServer(
                     configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddScoped<IRepository<Transaction>, EfRepository<Transaction>>();
-                
+            services.AddScoped<IDbContext, FODbContext>();
+            services.AddScoped<IUnitOfWorkQuery, UnitOfWorkQuery>();
+            services.AddScoped<IUnitOfWorkCommand, UnitOfWorkCommand>();
+
             return services;
         }
     }

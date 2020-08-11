@@ -8,7 +8,9 @@ namespace Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<RecurrentTransactionCustomFrequency> builder)
         {
-            builder.Property(rtcf => rtcf.RecurrentTransactionCustomFrequencyId).HasColumnName("RecurrentTransactionCustomFrequencyID");
+            builder.ToTable("RecurrentTransactionCustomFrequencies");
+
+            builder.HasKey(rtcf => rtcf.Id);
 
             builder.Property(rtcf => rtcf.TimeUnit).HasColumnName("Time Unit").IsRequired();
 

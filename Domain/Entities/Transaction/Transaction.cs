@@ -12,7 +12,6 @@ namespace Domain.Entities.Transaction
             TransactionAmountModifications = new HashSet<TransactionAmountModification>();
         }
 
-        public int TransactionId { get; set; }
         public string Title { get; set; }
         public int Type { get; set; }
         public int Currency { get; set; }

@@ -47,7 +47,7 @@ namespace Infrastructure.Services
             var userName =_httpContextAccessor.HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
             var user = await _userManager.FindByNameAsync(userName);
-            var roleName = GetRoleNameByUserIdAsync(user.Id);
+            var roleName = await GetRoleNameByUserIdAsync(user.Id);
            
             return new LoggedUserModel
             {
@@ -58,12 +58,13 @@ namespace Infrastructure.Services
 
         public async Task<LoggedUserModel> Login(LoginQuery request)
         {
-            var user = _userManager.FindByEmailAsync(request.Email).Result;
-            var roleName = GetRoleNameByUserIdAsync(user.Id);
+            var user = await _userManager.FindByEmailAsync(request.Email);
 
             if (user == null)
-                throw new RestException(HttpStatusCode.Unauthorized);
-
+                throw new RestException(HttpStatusCode.BadRequest);
+            
+            var roleName = await GetRoleNameByUserIdAsync(user.Id);
+          
             var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 
             if (result.Succeeded)
@@ -107,10 +108,10 @@ namespace Infrastructure.Services
             throw new Exception("Problem creating user");
         }
 
-        private string GetRoleNameByUserIdAsync(string userId)
-        {
-            var roleId = _identityContext.UserRoles.Where(x => x.UserId == userId).Select(x => x.RoleId).FirstOrDefault();
-            var role = _roleManager.FindByIdAsync(roleId).Result;
+        private async Task<string> GetRoleNameByUserIdAsync(string userId)
+        {      
+            var userRole = await _identityContext.UserRoles.FirstOrDefaultAsync(x => x.UserId == userId);
+            var role = await _roleManager.FindByIdAsync(userRole.RoleId);
             
             return role?.Name ??
                 throw new BadRequestException("Role not found");

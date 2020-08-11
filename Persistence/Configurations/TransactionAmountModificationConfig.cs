@@ -8,11 +8,9 @@ namespace Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<TransactionAmountModification> builder)
         {
-            builder.HasKey(tam => new { tam.TransactionId, tam.AmountModificationId });
+            builder.ToTable("TransactionAmountModifications");
 
-            builder.Property(tam => tam.TransactionId).HasColumnName("TransactionID");
-
-            builder.Property(tam => tam.AmountModificationId).HasColumnName("AmountModificationID");
+            builder.HasKey(tam => new { tam.TransactionId, tam.AmountModificationId });    
 
             builder.HasOne(tam => tam.Transaction)
                 .WithMany(t => t.TransactionAmountModifications)

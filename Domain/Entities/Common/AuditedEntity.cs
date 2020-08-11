@@ -2,7 +2,7 @@
 
 namespace Domain.Entities.Common
 {
-    public class AuditedEntity
+    public class AuditedEntity : BaseEntity
     {
         public string CreatedByUserId { get; set; }
         public DateTime CreatedAt { get; set; }

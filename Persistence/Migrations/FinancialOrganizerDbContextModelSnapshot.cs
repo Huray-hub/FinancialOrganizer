@@ -8,22 +8,21 @@ using Persistence;
 
 namespace Persistence.Migrations
 {
-    [DbContext(typeof(FinancialOrganizerDbContext))]
+    [DbContext(typeof(FODbContext))]
     partial class FinancialOrganizerDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.2")
+                .HasAnnotation("ProductVersion", "3.1.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Domain.Entities.Transaction.AmountModification", b =>
                 {
-                    b.Property<int>("AmountModificationId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("AmountModificationID")
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -45,16 +44,15 @@ namespace Persistence.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.HasKey("AmountModificationId");
+                    b.HasKey("Id");
 
                     b.ToTable("AmountModifications");
                 });
 
             modelBuilder.Entity("Domain.Entities.Transaction.RecurrentTransactionCustomFrequency", b =>
                 {
-                    b.Property<int>("RecurrentTransactionCustomFrequencyId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("RecurrentTransactionCustomFrequencyID")
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -69,7 +67,7 @@ namespace Persistence.Migrations
                     b.Property<int>("TransactionRecurrencyId")
                         .HasColumnType("int");
 
-                    b.HasKey("RecurrentTransactionCustomFrequencyId");
+                    b.HasKey("Id");
 
                     b.HasIndex("TransactionRecurrencyId")
                         .IsUnique();
@@ -79,9 +77,8 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.Transaction.RecurrentTransactionInstallment", b =>
                 {
-                    b.Property<int>("RecurrentTransactionInstallmentId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("RecurrentTransactionInstallmentID")
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -96,7 +93,7 @@ namespace Persistence.Migrations
                     b.Property<int>("TransactionRecurrencyId")
                         .HasColumnType("int");
 
-                    b.HasKey("RecurrentTransactionInstallmentId");
+                    b.HasKey("Id");
 
                     b.HasIndex("TransactionRecurrencyId");
 
@@ -105,9 +102,8 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.Transaction.RecurrentTransactionLimitation", b =>
                 {
-                    b.Property<int>("RecurrentTransactionLimitationId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("RecurrentTransactionLimitationID")
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -130,7 +126,7 @@ namespace Persistence.Migrations
                     b.Property<int>("TransactionRecurrencyId")
                         .HasColumnType("int");
 
-                    b.HasKey("RecurrentTransactionLimitationId");
+                    b.HasKey("Id");
 
                     b.HasIndex("TransactionRecurrencyId")
                         .IsUnique();
@@ -141,11 +137,9 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.Transaction.RecurrentTransactionSumAmountModification", b =>
                 {
                     b.Property<int>("RecurrentTransactionLimitationId")
-                        .HasColumnName("RecurrentTransactionLimitationID")
                         .HasColumnType("int");
 
                     b.Property<int>("AmountModificationId")
-                        .HasColumnName("AmountModificationID")
                         .HasColumnType("int");
 
                     b.HasKey("RecurrentTransactionLimitationId", "AmountModificationId");
@@ -157,9 +151,8 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.Transaction.Transaction", b =>
                 {
-                    b.Property<int>("TransactionId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("TransactionID")
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -167,13 +160,12 @@ namespace Persistence.Migrations
                         .HasColumnType("money");
 
                     b.Property<int>("CategoryId")
-                        .HasColumnName("CategoryID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("smalldatetime")
-                        .HasDefaultValue(new DateTime(2020, 3, 15, 0, 48, 18, 837, DateTimeKind.Local).AddTicks(9483));
+                        .HasDefaultValue(new DateTime(2020, 6, 30, 0, 44, 15, 616, DateTimeKind.Local).AddTicks(3493));
 
                     b.Property<string>("CreatedByUserId")
                         .IsRequired()
@@ -212,8 +204,7 @@ namespace Persistence.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
-                    b.HasKey("TransactionId")
-                        .HasAnnotation("SqlServer:Clustered", true);
+                    b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
@@ -223,11 +214,9 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.Transaction.TransactionAmountModification", b =>
                 {
                     b.Property<int>("TransactionId")
-                        .HasColumnName("TransactionID")
                         .HasColumnType("int");
 
                     b.Property<int>("AmountModificationId")
-                        .HasColumnName("AmountModificationID")
                         .HasColumnType("int");
 
                     b.HasKey("TransactionId", "AmountModificationId");
@@ -239,9 +228,8 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.Transaction.TransactionCategory", b =>
                 {
-                    b.Property<int>("TransactionCategoryId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("TransactionCategoryID")
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -250,16 +238,15 @@ namespace Persistence.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.HasKey("TransactionCategoryId");
+                    b.HasKey("Id");
 
                     b.ToTable("TransactionCategories");
                 });
 
             modelBuilder.Entity("Domain.Entities.Transaction.TransactionRecurrency", b =>
                 {
-                    b.Property<int>("TransactionRecurrencyId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("TransactionRecurrencyID")
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -275,7 +262,7 @@ namespace Persistence.Migrations
                     b.Property<int>("TransactionId")
                         .HasColumnType("int");
 
-                    b.HasKey("TransactionRecurrencyId");
+                    b.HasKey("Id");
 
                     b.HasIndex("TransactionId")
                         .IsUnique();

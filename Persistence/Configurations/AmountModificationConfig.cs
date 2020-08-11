@@ -8,7 +8,9 @@ namespace Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<AmountModification> builder)
         {
-            builder.Property(am => am.AmountModificationId).HasColumnName("AmountModificationID");
+            builder.ToTable("AmountModifications");
+
+            builder.HasKey(am => am.Id);
 
             builder.Property(am => am.Title).HasMaxLength(50).IsRequired();
 
@@ -18,6 +20,6 @@ namespace Persistence.Configurations
 
             builder.Property(am => am.AmountCalculationType).HasColumnName("Amount Calculation Type")
                 .HasDefaultValue(0).IsRequired();
-        }
+        }    
     }
 }

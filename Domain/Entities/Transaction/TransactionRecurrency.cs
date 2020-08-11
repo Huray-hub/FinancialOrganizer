@@ -3,14 +3,13 @@ using System.Collections.Generic;
 
 namespace Domain.Entities.Transaction
 {
-    public class TransactionRecurrency
+    public class TransactionRecurrency : BaseEntity
     {
         public TransactionRecurrency()
         {
             RecurrentTransactionInstallments = new HashSet<RecurrentTransactionInstallment>();
         }
 
-        public int TransactionRecurrencyId { get; set; }
         public bool HasLimitations { get; set; }
         public int FrequencyType { get; set; }
       

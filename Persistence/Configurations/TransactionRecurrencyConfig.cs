@@ -8,7 +8,9 @@ namespace Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<TransactionRecurrency> builder)
         {
-            builder.Property(tr => tr.TransactionRecurrencyId).HasColumnName("TransactionRecurrencyID");
+            builder.ToTable("TransactionRecurrencies");
+
+            builder.HasKey(tr => tr.Id);
 
             builder.Property(tr => tr.HasLimitations).HasColumnType("bit").HasDefaultValue(false).IsRequired();
 

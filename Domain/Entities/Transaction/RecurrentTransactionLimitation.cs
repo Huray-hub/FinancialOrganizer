@@ -3,14 +3,13 @@ using System.Collections.Generic;
 
 namespace Domain.Entities.Transaction
 {
-    public class RecurrentTransactionLimitation
+    public class RecurrentTransactionLimitation : BaseEntity
     {
         public RecurrentTransactionLimitation()
         {
             RecurrentTransactionSumAmountModifications = new HashSet<RecurrentTransactionSumAmountModification>();
         }
 
-        public int RecurrentTransactionLimitationId { get; set; }
         public int SumInstallments { get; set; }
         public DateTime EndDate { get; set; }
         public decimal SumAmount { get; set; }

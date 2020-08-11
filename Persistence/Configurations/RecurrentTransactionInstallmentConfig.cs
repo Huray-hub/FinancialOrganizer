@@ -8,7 +8,9 @@ namespace Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<RecurrentTransactionInstallment> builder)
         {
-            builder.Property(rti => rti.RecurrentTransactionInstallmentId).HasColumnName("RecurrentTransactionInstallmentID");
+            builder.ToTable("RecurrentTransactionInstallments");
+
+            builder.HasKey(rti => rti.Id);
 
             builder.Property(rti => rti.CurrentInstallment).HasColumnName("Current Installment").IsRequired();
 

@@ -8,12 +8,10 @@ namespace Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<RecurrentTransactionSumAmountModification> builder)
         {
+            builder.ToTable("RecurrentTransactionSumAmountModifications");
+
             builder.HasKey(rtsam => new { rtsam.RecurrentTransactionLimitationId, rtsam.AmountModificationId });
-
-            builder.Property(rtsam => rtsam.RecurrentTransactionLimitationId).HasColumnName("RecurrentTransactionLimitationID");
-
-            builder.Property(rtsam => rtsam.AmountModificationId).HasColumnName("AmountModificationID");
-
+         
             builder.HasOne(rtsam => rtsam.RecurrentTransactionLimitation)
                 .WithMany(rtl => rtl.RecurrentTransactionSumAmountModifications)
                 .HasForeignKey(rtsam => rtsam.RecurrentTransactionLimitationId)

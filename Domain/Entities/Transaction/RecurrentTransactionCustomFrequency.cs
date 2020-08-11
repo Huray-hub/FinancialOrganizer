@@ -1,8 +1,7 @@
 ﻿namespace Domain.Entities.Transaction
 {
-    public class RecurrentTransactionCustomFrequency
+    public class RecurrentTransactionCustomFrequency : BaseEntity
     {
-        public int RecurrentTransactionCustomFrequencyId { get; set; }
         public int TimeUnit { get; set; }
         public int TimeUnitQuantity { get; set; }
 

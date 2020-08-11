@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using Application.Interfaces;
+using Domain;
 using Domain.Entities.Transaction;
 using Domain.Enumerations;
 using Infrastructure.Identity;
@@ -11,11 +12,14 @@ using System.Threading.Tasks;
 
 namespace Persistence
 {
-    public class FinancialOrganizerDbContextSeed
+    public class FODbContextSeed
     {
-        public static async Task SeedAsync(FinancialOrganizerDbContext context)
+        public static async Task SeedAsync(FODbContext context)
         {
-            if (!context.TransactionCategories.Any())
+            var unitOfWorkQuery = new UnitOfWorkQuery(context);
+            var unitOfWorkCommand = new UnitOfWorkCommand(context);
+
+            if (!unitOfWorkQuery.Any<TransactionCategory>())
             {
                 var categories = new List<TransactionCategory>
                 {
@@ -40,10 +44,10 @@ namespace Persistence
                         Name = "Salary"
                     }
                 };
-                await context.TransactionCategories.AddRangeAsync(categories);
+                unitOfWorkCommand.AddRange(categories);
             }
 
-            if (!context.AmountModifications.Any())
+            if (!unitOfWorkQuery.Any<AmountModification>())
             {
                 var amountModifications = new List<AmountModification>
                 {
@@ -69,10 +73,10 @@ namespace Persistence
                         AmountCalculationType = 0
                     }
                 };
-                await context.AmountModifications.AddRangeAsync(amountModifications);
+                unitOfWorkCommand.AddRange(amountModifications);
             }
 
-            if (!context.Transactions.Any())
+            if (!unitOfWorkQuery.Any<Transaction>())
             {
                 var transactions = new List<Transaction>
                 {
@@ -201,10 +205,10 @@ namespace Persistence
                         }
                     }
                 };
-                await context.Transactions.AddRangeAsync(transactions);
+                unitOfWorkCommand.AddRange(transactions);
             }
 
-            await context.SaveChangesAsync();
+            await unitOfWorkCommand.SaveChangesAsync();
         }
     }
 }

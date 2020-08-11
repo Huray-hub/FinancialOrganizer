@@ -1,5 +1,4 @@
 using System;
-using Domain;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -27,11 +26,11 @@ namespace API
                     var roleManager = services.GetRequiredService<RoleManager<ApplicationRole>>();
                     identityContext.Database.Migrate();
 
-                    var financialOrganizerContext = services.GetRequiredService<FinancialOrganizerDbContext>();
+                    var financialOrganizerContext = services.GetRequiredService<FODbContext>();
                     financialOrganizerContext.Database.Migrate();
 
                     ApplicationDbContextSeed.SeedAsync(userManager, roleManager).Wait();
-                    FinancialOrganizerDbContextSeed.SeedAsync(financialOrganizerContext).Wait();
+                    FODbContextSeed.SeedAsync(financialOrganizerContext).Wait();
                 }
                 catch (Exception ex)
                 {

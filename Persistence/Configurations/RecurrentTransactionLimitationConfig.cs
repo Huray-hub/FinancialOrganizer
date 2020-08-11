@@ -8,7 +8,9 @@ namespace Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<RecurrentTransactionLimitation> builder)
         {
-            builder.Property(rtl => rtl.RecurrentTransactionLimitationId).HasColumnName("RecurrentTransactionLimitationID");
+            builder.ToTable("RecurrentTransactionLimitations");
+
+            builder.HasKey(rtl => rtl.Id);
 
             builder.Property(rtl => rtl.SumInstallments).HasColumnName("Sum Installments").IsRequired();
 
