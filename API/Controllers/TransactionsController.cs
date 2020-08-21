@@ -1,5 +1,6 @@
 ﻿using Application.Transactions;
 using Application.Transactions.Commands;
+using Application.Transactions.Queries;
 using Domain.Entities.Transaction;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -18,5 +19,15 @@ namespace API.Controllers
 
         [HttpPost]
         public async Task<ActionResult<Unit>> CreateTransaction(CreateTransactionCommand command) => await Mediator.Send(command);
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Unit>> DeleteTransaction(int id) => await Mediator.Send(new DeleteTransactionCommand { Id = id });
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Unit>> EditTransaction(int id, EditTransactionCommand command)
+        {
+            command.Id = id;
+            return await Mediator.Send(command);
+        }
     }
 }

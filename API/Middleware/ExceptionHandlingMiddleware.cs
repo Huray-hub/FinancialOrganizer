@@ -1,18 +1,23 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
-using Application.Exceptions;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Application.Common.Exceptions;
 
 namespace API.Middleware
 {
     public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly ILogger<ExceptionHandlingMiddleware> _logger;
 
-        public ExceptionHandlingMiddleware(RequestDelegate next) => 
+        public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
+        {
             _next = next;
+            _logger = logger;
+        }
 
         public async Task Invoke(HttpContext context)
         {
@@ -22,38 +27,36 @@ namespace API.Middleware
             }
             catch (Exception ex)
             {
-                await HandleExceptionAsync(context, ex);
+                await HandleExceptionAsync(context, ex, _logger);
             }
         }
 
-        private Task HandleExceptionAsync(HttpContext context, Exception exception)
-        {
-            var code = HttpStatusCode.InternalServerError;
-
-            var result = string.Empty;
+        private async Task HandleExceptionAsync(HttpContext context, Exception exception, ILogger<ExceptionHandlingMiddleware> logger)
+        {     
+            object errors = null;
 
             switch (exception)
             {
-                case ValidationException validationException:
-                    code = HttpStatusCode.BadRequest;
-                    result = JsonConvert.SerializeObject(validationException.Failures);
+                case RestException re:
+                    logger.LogError(exception, "REST ERROR");
+                    errors = re.Errors;
+                    context.Response.StatusCode = (int)re.Code;
                     break;
-                case BadRequestException badRequestException:
-                    code = HttpStatusCode.BadRequest;
-                    result = badRequestException.Message;
-                    break;
-                case NotFoundException _:
-                    code = HttpStatusCode.NotFound;
+                case Exception e:
+                    logger.LogError(exception, "SERVER ERROR");
+                    errors = string.IsNullOrWhiteSpace(e.Message) ? "Error" : e.Message;
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     break;
             }
 
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)code;
 
-            if (result == string.Empty)            
-                result = JsonConvert.SerializeObject(new { error = exception.Message });
-            
-            return context.Response.WriteAsync(result);
+            if (errors != null)
+            {
+                var result = JsonConvert.SerializeObject(new { errors });
+
+                await context.Response.WriteAsync(result);
+            }                              
         }
     }
 }

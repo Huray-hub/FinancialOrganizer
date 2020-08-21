@@ -1,13 +1,7 @@
-﻿using Application.Interfaces;
-using Domain;
-using Domain.Entities.Transaction;
+﻿using Domain.Entities.Transaction;
 using Domain.Enumerations;
-using Infrastructure.Identity;
-using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Persistence

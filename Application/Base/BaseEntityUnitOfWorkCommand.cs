@@ -1,6 +1,7 @@
-﻿using Application.Interfaces;
+﻿using Application.Common.Adapters;
 using Domain.Entities;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Application.Base
 {
@@ -22,7 +23,7 @@ namespace Application.Base
 
         public void Update(TEntity entity) => _unitOfWork.Update(entity);
 
-        public void SaveChanges() => _unitOfWork.SaveChangesAsync();
+        public async Task<int> SaveChanges() => await _unitOfWork.SaveChangesAsync();
 
         public void BulkSaveChanges(IList<TEntity> entities, string metaTimestampKey = null, List<string> propertiesToInclude = null) => 
             _unitOfWork.BulkSaveChanges(entities, metaTimestampKey, propertiesToInclude);

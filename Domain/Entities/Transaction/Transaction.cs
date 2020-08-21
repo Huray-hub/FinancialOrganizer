@@ -14,8 +14,7 @@ namespace Domain.Entities.Transaction
 
         public string Title { get; set; }
         public int Type { get; set; }
-        public int Currency { get; set; }
-        public int TransactionAmountId { get; set; }
+        public int Currency { get; set; }      
         public decimal Amount { get; set; }
         public decimal? MaxAmount { get; set; }
         public DateTime TriggerDate { get; set; }
@@ -26,7 +25,7 @@ namespace Domain.Entities.Transaction
 
         //public ApplicationUser User { get; set; }
         public TransactionCategory Category { get; set; }
-        public ICollection<TransactionAmountModification> TransactionAmountModifications { get; private set; }
+        public ICollection<TransactionAmountModification> TransactionAmountModifications { get;  set; }
         public TransactionRecurrency TransactionRecurrency { get; set; }    
     }
 }

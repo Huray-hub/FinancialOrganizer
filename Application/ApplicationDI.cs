@@ -6,6 +6,7 @@ using Application.Base;
 using Domain.Entities;
 using Application.Transactions.Queries;
 using Application.Transactions.Commands;
+using Application.AmountModifications.Queries;
 
 namespace Application
 {
@@ -24,6 +25,7 @@ namespace Application
 
             services.AddTransient<ITransactionUnitOfWorkQuery, TransactionUnitOfWorkQuery>();
             services.AddTransient<ITransactionUnitOfWorkCommand, TransactionUnitOfWorkCommand>();
+            services.AddTransient<IAmountModificationUowQuery, AmountModificationUowQuery>();
 
             return services;
         }

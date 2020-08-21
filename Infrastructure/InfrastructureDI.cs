@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Application.Interfaces;
+using Application.Common.Adapters;
 using Infrastructure.Services;
 
 namespace Infrastructure
@@ -17,6 +17,7 @@ namespace Infrastructure
         {
             services.AddScoped<IUserManagerService, UserManagerService>();
             services.AddScoped<IJwtTokenGeneratorService, JwtTokenGeneratorService>();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));

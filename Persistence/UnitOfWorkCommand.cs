@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+﻿using Application.Common.Adapters;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -69,7 +69,7 @@ namespace Persistence
             dbSet.RemoveRange(entities);
         }
 
-        public async Task SaveChangesAsync() => await _dbContext.SaveChangesAsync();
+        public async Task<int> SaveChangesAsync() => await _dbContext.SaveChangesAsync();
 
         public void BulkSaveChanges<TEntity>(IList<TEntity> entities, string metaTimestampKey, List<string> propertiesToInclude)
             where TEntity : class, IBaseEntity, new() =>

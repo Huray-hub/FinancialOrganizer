@@ -1,5 +1,4 @@
-﻿using Application.Interfaces;
-using Domain.Entities.Transaction;
+﻿using Application.Common.Adapters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

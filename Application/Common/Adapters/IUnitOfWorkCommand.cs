@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Application.Interfaces
+namespace Application.Common.Adapters
 {
     public interface IUnitOfWorkCommand
     {
@@ -15,7 +15,7 @@ namespace Application.Interfaces
         void Remove<TEntity>(TEntity entity) where TEntity : class, IBaseEntity, new();
         void RemoveRange<TEntity>(IEnumerable<TEntity> entities) where TEntity : class, IBaseEntity, new();
                 
-        Task SaveChangesAsync();
+        Task<int> SaveChangesAsync();
         void BulkSaveChanges<TEntity>(IList<TEntity> entities, string metaTimestampKey = null, List<string> propertiesToInclude = null) where TEntity : class, IBaseEntity, new();
     }
 }

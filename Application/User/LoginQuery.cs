@@ -1,10 +1,7 @@
-﻿using Application.Interfaces;
-using Application.Models;
+﻿using Application.Common.Adapters;
+using Application.Common.Models;
 using FluentValidation;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -32,7 +29,7 @@ namespace Application.User
         public LoginQueryHandler(IUserManagerService userManagerService) => 
             _userManagerService = userManagerService;
 
-        public Task<LoggedUserModel> Handle(LoginQuery request, CancellationToken cancellationToken) => 
-            _userManagerService.Login(request);
+        public async Task<LoggedUserModel> Handle(LoginQuery request, CancellationToken cancellationToken) => 
+            await _userManagerService.Login(request);
     }
 }

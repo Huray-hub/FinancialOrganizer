@@ -1,11 +1,12 @@
-﻿using Application.Interfaces;
-using Application.Models;
-using Application.Validators;
-using FluentValidation;
-using MediatR;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using MediatR;
+using FluentValidation;
+using Application.Common.Adapters;
+using Application.Common.Models;
+using Application.Common.ValidatorExtensions;
+
 
 namespace Application.User
 {

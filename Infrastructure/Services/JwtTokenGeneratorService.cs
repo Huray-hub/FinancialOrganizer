@@ -1,5 +1,5 @@
 ﻿using Infrastructure.Identity;
-using Microsoft.AspNetCore.Identity;
+using Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -13,18 +13,19 @@ namespace Infrastructure
     public class JwtTokenGeneratorService : IJwtTokenGeneratorService
     {
         private readonly SymmetricSecurityKey _key;
-        public JwtTokenGeneratorService(IConfiguration configuration) => 
+        public JwtTokenGeneratorService(IConfiguration configuration) =>
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["TokenKey"]));
 
         public string CreateToken(ApplicationUser user, string roleName)
         {
             var claims = new List<Claim>
             {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(JwtRegisteredClaimNames.NameId, user.UserName),
                 new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
                 new Claim(ClaimTypes.Role, roleName)
             };
-       
+
             var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
 
             var tokenDescriptor = new SecurityTokenDescriptor

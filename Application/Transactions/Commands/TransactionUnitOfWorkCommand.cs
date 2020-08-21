@@ -1,5 +1,5 @@
 ﻿using Application.Base;
-using Application.Interfaces;
+using Application.Common.Adapters;
 using Domain.Entities.Transaction;
 
 namespace Application.Transactions.Commands

@@ -1,7 +1,6 @@
 ﻿using Infrastructure.Identity;
-using Microsoft.AspNetCore.Identity;
 
-namespace Infrastructure
+namespace Infrastructure.Services
 {
     public interface IJwtTokenGeneratorService
     {

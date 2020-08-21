@@ -1,6 +1,4 @@
-﻿using Application.Exceptions;
-using Application.Interfaces;
-using Application.Models;
+﻿using Application.Common.Adapters;
 using Application.User;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +9,8 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Application.Common.Exceptions;
+using Application.Common.Models;
 
 namespace Infrastructure.Services
 {
@@ -79,21 +79,19 @@ namespace Infrastructure.Services
             throw new RestException(HttpStatusCode.Unauthorized);
         }
 
-        public async Task<LoggedUserModel> Register(RegisterCommand request)
+        public async Task<LoggedUserModel> Register(RegisterCommand command)
         {
-            if (await _identityContext.Users.Where(x => x.Email == request.Email).AnyAsync())
+            if (await _identityContext.Users.AnyAsync(x => x.Email == command.Email))
                 throw new BadRequestException("Email already exists");
 
-            var username = $"{request.FirstName} {request.LastName}";
-            if (await _identityContext.Users.Where(x => x.UserName == username).AnyAsync())
+            var username = $"{command.FirstName} {command.LastName}";
+            if (await _identityContext.Users.AnyAsync(x => x.UserName == username))
                 throw new BadRequestException("Username already exists");
 
-            var user = new ApplicationUser(request);
-
+            var user = new ApplicationUser(command);
             
-
-            var result = await _userManager.CreateAsync(user, request.Password);
-
+            var result = await _userManager.CreateAsync(user, command.Password);
+           
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(user, "User");

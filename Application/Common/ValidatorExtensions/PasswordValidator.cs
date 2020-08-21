@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 
-namespace Application.Validators
+namespace Application.Common.ValidatorExtensions
 {
-    public static class ValidatorExtensions
+    public static class PasswordValidator
     {
         public static IRuleBuilder<T, string> IsPassword<T>(this IRuleBuilder<T, string> ruleBuilder)
         {
