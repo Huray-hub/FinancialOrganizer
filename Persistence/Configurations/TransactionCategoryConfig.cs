@@ -11,7 +11,7 @@ namespace Persistence.Configurations
             builder.ToTable("TransactionCategories");
 
             builder.HasKey(tc => tc.Id);
-           
+
             builder.Property(tc => tc.Name).HasMaxLength(50).IsRequired();
         }
     }

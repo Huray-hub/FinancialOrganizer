@@ -1,6 +1,6 @@
-﻿using Application.User;
+﻿using Application.Common.Models;
+using Application.User;
 using System.Threading.Tasks;
-using Application.Common.Models;
 
 namespace Application.Common.Adapters
 {

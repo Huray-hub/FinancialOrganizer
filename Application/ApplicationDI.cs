@@ -1,12 +1,14 @@
-﻿using MediatR;
-using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
-using AutoMapper;
-using Application.Base;
-using Domain.Entities;
-using Application.Transactions.Queries;
-using Application.Transactions.Commands;
+﻿using Application.AmountModifications.Commands;
 using Application.AmountModifications.Queries;
+using Application.Base;
+using Application.TransactionCategories;
+using Application.Transactions.Commands;
+using Application.Transactions.Queries;
+using AutoMapper;
+using Domain.Entities;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace Application
 {
@@ -26,7 +28,10 @@ namespace Application
             services.AddTransient<ITransactionUnitOfWorkQuery, TransactionUnitOfWorkQuery>();
             services.AddTransient<ITransactionUnitOfWorkCommand, TransactionUnitOfWorkCommand>();
             services.AddTransient<IAmountModificationUowQuery, AmountModificationUowQuery>();
+            services.AddTransient<IAmountModificationUowCommand, AmountModificationUowCommand>();
+            services.AddTransient<ITransactionCategoryUowQuery, TransactionCategoryUowQuery>();
 
+         
             return services;
         }
     }

@@ -18,6 +18,6 @@ namespace Domain.Entities.Transaction
 
         public ICollection<TransactionAmountModification> TransactionAmountModifications { get; private set; }
         public ICollection<RecurrentTransactionSumAmountModification> RecurrentTransactionSumAmountModifications { get; private set; }
-        
-    }  
+
+    }
 }

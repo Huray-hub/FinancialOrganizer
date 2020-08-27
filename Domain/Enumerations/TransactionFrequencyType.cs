@@ -2,7 +2,7 @@
 {
     public enum TransactionFrequencyType
     {
-        OneTime,        
+        OneTime,
         Daily,
         Weekly,
         Monthly,

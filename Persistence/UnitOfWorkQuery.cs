@@ -61,7 +61,7 @@ namespace Persistence
 
             if (includeFunc != null) query = includeFunc(query);
 
-            return await query.FirstOrDefaultAsync(x => x.Id == id); ;
+            return await query.SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<TEntity> GetById<TEntity>(int id, params Expression<Func<TEntity, object>>[] includeExpressions) where TEntity : class, IBaseEntity, new()
@@ -72,7 +72,20 @@ namespace Persistence
             foreach (var expression in includeExpressions)
                 query = query.Include(expression);
 
-            return await query.FirstOrDefaultAsync(x => x.Id == id); 
+            return await query.SingleOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<TEntity> GetById<TEntity>(int id, Expression<Func<TEntity, bool>> predicate = null, Func<IQueryable<TEntity>, IQueryable<TEntity>> includeFunc = null)
+            where TEntity : class, IBaseEntity, new()
+        {
+            DbSet<TEntity> dbSet = GetDbSet<TEntity>();
+            IQueryable<TEntity> query = dbSet;
+
+            if (includeFunc != null) query = includeFunc(query);
+
+            if (predicate != null) query = query.Where(predicate);
+
+            return await query.SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<List<TEntity>> GetList<TEntity>(Func<IQueryable<TEntity>, IQueryable<TEntity>> includeFunc = null,
@@ -83,8 +96,9 @@ namespace Persistence
 
             if (includeFunc != null) query = includeFunc(query);
 
-            return asNoTracking ? await query.AsNoTracking().ToListAsync() 
-                                : await query.ToListAsync();
+            if (asNoTracking) query.AsNoTracking();
+
+            return await query.ToListAsync();
         }
 
         public async Task<List<TEntity>> GetList<TEntity>(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> includeFunc = null,
@@ -95,8 +109,13 @@ namespace Persistence
 
             if (includeFunc != null) query = includeFunc(query);
 
-            return asNoTracking ? await query.Where(predicate).AsNoTracking().ToListAsync()
-                                : await query.Where(predicate).ToListAsync();
+            query = query.Where(predicate);
+
+            if (asNoTracking) query.AsNoTracking();
+
+            return await query.ToListAsync();
         }
+
+
     }
 }

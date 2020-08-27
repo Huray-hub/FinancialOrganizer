@@ -2,6 +2,7 @@
 using Domain.Enumerations;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Persistence
@@ -202,7 +203,7 @@ namespace Persistence
                 unitOfWorkCommand.AddRange(transactions);
             }
 
-            await unitOfWorkCommand.SaveChangesAsync();
+            await unitOfWorkCommand.SaveChanges();
         }
     }
 }

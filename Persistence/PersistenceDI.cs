@@ -1,8 +1,9 @@
 ﻿using Application.Common.Adapters;
+using Application.Transactions.Queries;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
+using Persistence.Queryables;
 
 namespace Persistence
 {
@@ -17,6 +18,7 @@ namespace Persistence
             services.AddScoped<IDbContext, FODbContext>();
             services.AddScoped<IUnitOfWorkQuery, UnitOfWorkQuery>();
             services.AddScoped<IUnitOfWorkCommand, UnitOfWorkCommand>();
+            services.AddScoped<ITransactionQueryables, TransactionQueryables>();
 
             return services;
         }

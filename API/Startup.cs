@@ -30,11 +30,15 @@ namespace API
             services.AddPersistence(Configuration);
             services.AddApplication();
 
-            services.AddControllers(option =>
+            services.AddControllers(options =>
             {
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-                option.Filters.Add(new AuthorizeFilter(policy));
-            });           
+                options.Filters.Add(new AuthorizeFilter(policy));
+
+
+            }).AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,8 +58,8 @@ namespace API
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => 
-                endpoints.MapControllers());        
+            app.UseEndpoints(endpoints =>
+                endpoints.MapControllers());
         }
     }
 }

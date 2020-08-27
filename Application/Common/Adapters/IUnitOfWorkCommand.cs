@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Application.Common.Adapters
@@ -14,8 +15,8 @@ namespace Application.Common.Adapters
 
         void Remove<TEntity>(TEntity entity) where TEntity : class, IBaseEntity, new();
         void RemoveRange<TEntity>(IEnumerable<TEntity> entities) where TEntity : class, IBaseEntity, new();
-                
-        Task<int> SaveChangesAsync();
+
+        Task<int> SaveChanges(CancellationToken cancellationToken);
         void BulkSaveChanges<TEntity>(IList<TEntity> entities, string metaTimestampKey = null, List<string> propertiesToInclude = null) where TEntity : class, IBaseEntity, new();
     }
 }

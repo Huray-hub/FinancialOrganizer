@@ -1,6 +1,7 @@
 ﻿using Application.Common.Adapters;
 using Domain.Entities;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Application.Base
@@ -19,13 +20,13 @@ namespace Application.Base
 
         public void Remove(TEntity entity) => _unitOfWork.Remove(entity);
 
-        public void RemoveRange(IEnumerable<TEntity> entity) =>  _unitOfWork.RemoveRange(entity);
+        public void RemoveRange(IEnumerable<TEntity> entity) => _unitOfWork.RemoveRange(entity);
 
         public void Update(TEntity entity) => _unitOfWork.Update(entity);
 
-        public async Task<int> SaveChanges() => await _unitOfWork.SaveChangesAsync();
+        public async Task<int> SaveChanges(CancellationToken cancellationToken = new CancellationToken()) => await _unitOfWork.SaveChanges(cancellationToken);
 
-        public void BulkSaveChanges(IList<TEntity> entities, string metaTimestampKey = null, List<string> propertiesToInclude = null) => 
+        public void BulkSaveChanges(IList<TEntity> entities, string metaTimestampKey = null, List<string> propertiesToInclude = null) =>
             _unitOfWork.BulkSaveChanges(entities, metaTimestampKey, propertiesToInclude);
     }
 }

@@ -26,10 +26,10 @@ namespace Application.User
     {
         private readonly IUserManagerService _userManagerService;
 
-        public LoginQueryHandler(IUserManagerService userManagerService) => 
+        public LoginQueryHandler(IUserManagerService userManagerService) =>
             _userManagerService = userManagerService;
 
-        public async Task<LoggedUserModel> Handle(LoginQuery request, CancellationToken cancellationToken) => 
+        public async Task<LoggedUserModel> Handle(LoginQuery request, CancellationToken cancellationToken) =>
             await _userManagerService.Login(request);
     }
 }

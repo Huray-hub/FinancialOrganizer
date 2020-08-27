@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Domain.Entities.Transaction
 {
@@ -12,7 +11,7 @@ namespace Domain.Entities.Transaction
 
         public bool HasLimitations { get; set; }
         public int FrequencyType { get; set; }
-      
+
         public int TransactionId { get; set; }
 
         public Transaction Transaction { get; set; }

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Persistence
@@ -69,7 +70,7 @@ namespace Persistence
             dbSet.RemoveRange(entities);
         }
 
-        public async Task<int> SaveChangesAsync() => await _dbContext.SaveChangesAsync();
+        public async Task<int> SaveChanges(CancellationToken cancellationToken = new CancellationToken()) => await _dbContext.SaveChangesAsync(cancellationToken);
 
         public void BulkSaveChanges<TEntity>(IList<TEntity> entities, string metaTimestampKey, List<string> propertiesToInclude)
             where TEntity : class, IBaseEntity, new() =>

@@ -10,7 +10,7 @@ namespace Persistence.Configurations
         {
             builder.ToTable("TransactionAmountModifications");
 
-            builder.HasKey(tam => new { tam.TransactionId, tam.AmountModificationId });    
+            builder.HasKey(tam => new { tam.TransactionId, tam.AmountModificationId });
 
             builder.HasOne(tam => tam.Transaction)
                 .WithMany(t => t.TransactionAmountModifications)

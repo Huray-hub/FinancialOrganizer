@@ -1,4 +1,6 @@
 ﻿using Application.Common.Adapters;
+using Application.Common.Exceptions;
+using Application.Common.Models;
 using Application.User;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Http;
@@ -9,8 +11,6 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Application.Common.Exceptions;
-using Application.Common.Models;
 
 namespace Infrastructure.Services
 {
@@ -44,11 +44,11 @@ namespace Infrastructure.Services
         #region Methods
         public async Task<LoggedUserModel> GetCurrentUser()
         {
-            var userName =_httpContextAccessor.HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+            var userName = _httpContextAccessor.HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
             var user = await _userManager.FindByNameAsync(userName);
             var roleName = await GetRoleNameByUserIdAsync(user.Id);
-           
+
             return new LoggedUserModel
             {
                 Username = user.DisplayName,
@@ -62,9 +62,9 @@ namespace Infrastructure.Services
 
             if (user == null)
                 throw new RestException(HttpStatusCode.BadRequest);
-            
+
             var roleName = await GetRoleNameByUserIdAsync(user.Id);
-          
+
             var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 
             if (result.Succeeded)
@@ -89,9 +89,9 @@ namespace Infrastructure.Services
                 throw new BadRequestException("Username already exists");
 
             var user = new ApplicationUser(command);
-            
+
             var result = await _userManager.CreateAsync(user, command.Password);
-           
+
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(user, "User");
@@ -107,10 +107,10 @@ namespace Infrastructure.Services
         }
 
         private async Task<string> GetRoleNameByUserIdAsync(string userId)
-        {      
+        {
             var userRole = await _identityContext.UserRoles.FirstOrDefaultAsync(x => x.UserId == userId);
             var role = await _roleManager.FindByIdAsync(userRole.RoleId);
-            
+
             return role?.Name ??
                 throw new BadRequestException("Role not found");
         }

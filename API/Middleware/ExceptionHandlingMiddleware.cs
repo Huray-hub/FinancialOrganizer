@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Application.Common.Exceptions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Application.Common.Exceptions;
 
 namespace API.Middleware
 {
@@ -32,7 +32,7 @@ namespace API.Middleware
         }
 
         private async Task HandleExceptionAsync(HttpContext context, Exception exception, ILogger<ExceptionHandlingMiddleware> logger)
-        {     
+        {
             object errors = null;
 
             switch (exception)
@@ -56,7 +56,7 @@ namespace API.Middleware
                 var result = JsonConvert.SerializeObject(new { errors });
 
                 await context.Response.WriteAsync(result);
-            }                              
+            }
         }
     }
 }

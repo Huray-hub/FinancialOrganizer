@@ -22,5 +22,5 @@ namespace Infrastructure.Identity
             builder.Property(u => u.PasswordHash).IsRequired();
         }
     }
-    
+
 }

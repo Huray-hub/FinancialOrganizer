@@ -8,11 +8,11 @@ namespace API.Controllers
 {
     [AllowAnonymous]
     public class AuthenticationController : MediatorBaseController
-    {         
+    {
         [HttpPost]
         public async Task<ActionResult<LoggedUserModel>> Login(LoginQuery query) =>
             await Mediator.Send(query);
-    
+
         [HttpPost]
         public async Task<ActionResult<LoggedUserModel>> Register(RegisterCommand command) =>
             await Mediator.Send(command);

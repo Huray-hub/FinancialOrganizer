@@ -20,6 +20,6 @@ namespace Persistence.Configurations
 
             builder.Property(am => am.AmountCalculationType).HasColumnName("Amount Calculation Type")
                 .HasDefaultValue(0).IsRequired();
-        }    
+        }
     }
 }

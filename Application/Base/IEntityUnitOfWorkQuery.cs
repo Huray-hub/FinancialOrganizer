@@ -13,6 +13,8 @@ namespace Application.Base
 
         Task<TEntity> GetById(int id, params Expression<Func<TEntity, object>>[] includeExpressions);
 
+        Task<TEntity> GetById(int id, Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> includeFunc = null);
+
         Task<List<TEntity>> GetList(Func<IQueryable<TEntity>, IQueryable<TEntity>> includeFunc = null);
 
         Task<List<TEntity>> GetList(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> includeFunc = null);

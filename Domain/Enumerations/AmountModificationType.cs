@@ -1,6 +1,6 @@
 ﻿namespace Domain.Enumerations
 {
-    public enum AdditionalType
+    public enum AmountModificationType
     {
         Charge,
         Discount

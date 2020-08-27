@@ -4,27 +4,27 @@ using AutoMapper;
 using Domain.Entities.Transaction;
 using MediatR;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Transactions.Queries
+namespace Application.Transactions.Queries.GetTransactionsList
 {
-    public class TransactionDetailsQuery : IRequest<TransactionDto>
+    public class TransactionsListQuery : IRequest<List<TransactionDto>>
     {
-        public int Id { get; set; }
         public bool IncludeNavigationProperties { get; set; }
     }
 
-    public class GetTransactionDetailsHandler : IRequestHandler<TransactionDetailsQuery, TransactionDto>
+    public class GetTransactionsListHandler : IRequestHandler<TransactionsListQuery, List<TransactionDto>>
     {
         private readonly ITransactionUnitOfWorkQuery _transactionUnitOfWorkQuery;
         private readonly ICurrentUserService _currentUserService;
         private readonly ITransactionQueryables _transactionQueryables;
         private readonly IMapper _mapper;
 
-        public GetTransactionDetailsHandler(
+        public GetTransactionsListHandler(
             ITransactionUnitOfWorkQuery transactionUnitOfWorkQuery,
             ICurrentUserService currentUserService,
             ITransactionQueryables transactionQueryables,
@@ -36,18 +36,19 @@ namespace Application.Transactions.Queries
             _mapper = mapper;
         }
 
-        public async Task<TransactionDto> Handle(TransactionDetailsQuery request, CancellationToken cancellationToken)
+        public async Task<List<TransactionDto>> Handle(TransactionsListQuery request, CancellationToken cancellationToken)
         {
             Func<IQueryable<Transaction>, IQueryable<Transaction>> includeFunc = null;
 
             if (request.IncludeNavigationProperties) includeFunc = _transactionQueryables.IncludeNavigationProperties;
 
-            var transaction = await _transactionUnitOfWorkQuery.GetTransaction(request.Id, _currentUserService.UserId, includeFunc);
+            var transactions = await _transactionUnitOfWorkQuery.GetTransactions(_currentUserService.UserId, includeFunc);
 
-            if (transaction == null)
-                throw new RestException(HttpStatusCode.NotFound, "transaction not found");
+            if (transactions.Count == 0)
+                throw new RestException(HttpStatusCode.NotFound);
 
-            return _mapper.Map<Transaction, TransactionDto>(transaction);
+            return _mapper.Map<List<Transaction>, List<TransactionDto>>(transactions);
         }
     }
+
 }

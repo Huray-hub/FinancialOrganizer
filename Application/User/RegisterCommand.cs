@@ -1,11 +1,11 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using MediatR;
-using FluentValidation;
-using Application.Common.Adapters;
+﻿using Application.Common.Adapters;
 using Application.Common.Models;
 using Application.Common.ValidatorExtensions;
+using FluentValidation;
+using MediatR;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 
 namespace Application.User
@@ -43,10 +43,10 @@ namespace Application.User
     {
         private readonly IUserManagerService _userManagerService;
 
-        public RegisterCommandHandler(IUserManagerService userManagerService) =>      
+        public RegisterCommandHandler(IUserManagerService userManagerService) =>
             _userManagerService = userManagerService;
-        
+
         public async Task<LoggedUserModel> Handle(RegisterCommand request, CancellationToken cancellationToken) =>
-            await _userManagerService.Register(request);     
+            await _userManagerService.Register(request);
     }
 }

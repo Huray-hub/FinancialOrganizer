@@ -11,7 +11,7 @@ namespace Persistence.Configurations
             builder.ToTable("RecurrentTransactionSumAmountModifications");
 
             builder.HasKey(rtsam => new { rtsam.RecurrentTransactionLimitationId, rtsam.AmountModificationId });
-         
+
             builder.HasOne(rtsam => rtsam.RecurrentTransactionLimitation)
                 .WithMany(rtl => rtl.RecurrentTransactionSumAmountModifications)
                 .HasForeignKey(rtsam => rtsam.RecurrentTransactionLimitationId)

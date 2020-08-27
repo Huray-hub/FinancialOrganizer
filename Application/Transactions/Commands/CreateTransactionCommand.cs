@@ -1,6 +1,8 @@
 ﻿using Application.AmountModifications.Queries;
 using Application.Common.Adapters;
+using Application.TransactionCategories;
 using Domain.Entities.Transaction;
+using Domain.Enumerations;
 using FluentValidation;
 using MediatR;
 using System;
@@ -29,10 +31,12 @@ namespace Application.Transactions.Commands
     {
         public CreateTransactionCommandValidator()
         {
-            RuleFor(x => x.Type).NotEmpty();
-            RuleFor(x => x.Currency).NotEmpty();
-            RuleFor(x => x.Amount).NotEmpty();
-            RuleFor(x => x.MaxAmount).NotEmpty();
+            RuleFor(x => x.Title).NotEmpty();
+            RuleFor(x => x.Type).NotEmpty().GreaterThanOrEqualTo(0).LessThan(Enum.GetValues(typeof(TransactionType)).Length);
+            RuleFor(x => x.Currency).NotEmpty().GreaterThanOrEqualTo(0).LessThan(Enum.GetValues(typeof(Currency)).Length);
+            RuleFor(x => x.Amount).NotEmpty().GreaterThan(0);
+            RuleFor(x => x.IsRecurrent).NotEmpty();
+            RuleFor(x => x.TransactionRecurrency).NotEmpty().When(x => x.IsRecurrent);
         }
     }
 
@@ -41,20 +45,24 @@ namespace Application.Transactions.Commands
         private readonly ITransactionUnitOfWorkCommand _transactionUnitOfWorkCommand;
         private readonly ICurrentUserService _currentUserService;
         private readonly IAmountModificationUowQuery _amountModificationUowQuery;
-
+        private readonly ITransactionCategoryUowQuery _transactionCategoryUowQuery;
 
         public CreateTransactionHandler(
             ITransactionUnitOfWorkCommand transactionUnitOfWorkCommand,
             ICurrentUserService currentUserService,
-            IAmountModificationUowQuery amountModificationUowQuery)
+            IAmountModificationUowQuery amountModificationUowQuery,
+            ITransactionCategoryUowQuery transactionCategoryUowQuery)
         {
             _transactionUnitOfWorkCommand = transactionUnitOfWorkCommand;
             _currentUserService = currentUserService;
             _amountModificationUowQuery = amountModificationUowQuery;
+            _transactionCategoryUowQuery = transactionCategoryUowQuery;
         }
 
         public async Task<Unit> Handle(CreateTransactionCommand request, CancellationToken cancellationToken)
         {
+            var category = await _transactionCategoryUowQuery.GetById(request.CategoryId);
+
             var transaction = new Transaction
             {
                 Title = request.Title,
@@ -69,16 +77,17 @@ namespace Application.Transactions.Commands
                 CreatedByUserId = _currentUserService.UserId,
                 CreatedAt = DateTime.Now,
                 LastModifiedByUserId = null,
-                LastModifiedAt = null
+                LastModifiedAt = null,
+                Category = category
             };
 
-            //TODO: Thelw otan an to transaction exei upostei x tropopoihseis, koines (kataxwrimenes) i oxi, na kanw query wste na vrw poies einai 
-            //koines, na kataxwrisw tis agnwstes me kapoio tropo pou na markarontai ws "mh swsmenes apo to xrhsth" (?? userId = null ??), kai na 
-            //kataxwrisw gia oles TransactionAmountModification
+            //TODO: When transaction has x amount modifications, common (saved already to db) or not, query to find which are common, 
+            //create and save the new ones,  mark them as "not saved from user"?? (?? userId = null ??), and map them with transaction 
+            // (TransactionAmountModification)
 
             //otan o xrhsths paei na kanei modification, epitopou call na ftiaxtei to amountmodification
 
-            if (request.AmountModificationIds.Any())
+            if (request.AmountModificationIds != null && request.AmountModificationIds.Any())
             {
                 var amountModifications = await _amountModificationUowQuery.GetList(x => request.AmountModificationIds.Contains(x.Id));
 
@@ -91,7 +100,7 @@ namespace Application.Transactions.Commands
 
             _transactionUnitOfWorkCommand.Add(transaction);
 
-            var success = await _transactionUnitOfWorkCommand.SaveChanges() > 0;
+            var success = await _transactionUnitOfWorkCommand.SaveChanges(cancellationToken) > 0;
 
             if (success) return Unit.Value;
 
