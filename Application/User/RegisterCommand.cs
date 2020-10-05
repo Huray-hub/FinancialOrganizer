@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.User
 {
-    public class RegisterCommand : IRequest<LoggedUserModel>
+    public class RegisterCommand : IRequest<Common.Models.LoggedUser>
     {
         public string Email { get; set; }
         public string FirstName { get; set; }
@@ -39,14 +39,14 @@ namespace Application.User
         }
     }
 
-    public class RegisterCommandHandler : IRequestHandler<RegisterCommand, LoggedUserModel>
+    public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Common.Models.LoggedUser>
     {
         private readonly IUserManagerService _userManagerService;
 
         public RegisterCommandHandler(IUserManagerService userManagerService) =>
             _userManagerService = userManagerService;
 
-        public async Task<LoggedUserModel> Handle(RegisterCommand request, CancellationToken cancellationToken) =>
+        public async Task<Common.Models.LoggedUser> Handle(RegisterCommand request, CancellationToken cancellationToken) =>
             await _userManagerService.Register(request);
     }
 }

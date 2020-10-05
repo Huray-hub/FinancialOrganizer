@@ -10,6 +10,7 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Services
@@ -42,21 +43,21 @@ namespace Infrastructure.Services
         #endregion
 
         #region Methods
-        public async Task<LoggedUserModel> GetCurrentUser()
+        public async Task<LoggedUser> RefreshUser()
         {
-            var userName = _httpContextAccessor.HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+            var userId = _httpContextAccessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var user = await _userManager.FindByNameAsync(userName);
+            var user = await _userManager.FindByIdAsync(userId);
             var roleName = await GetRoleNameByUserIdAsync(user.Id);
 
-            return new LoggedUserModel
+            return new LoggedUser
             {
                 Username = user.DisplayName,
                 Token = _jwtGenerator.CreateToken(user, roleName)
             };
         }
 
-        public async Task<LoggedUserModel> Login(LoginQuery request)
+        public async Task<LoggedUser> Login(LoginQuery request)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
 
@@ -69,7 +70,7 @@ namespace Infrastructure.Services
 
             if (result.Succeeded)
             {
-                return new LoggedUserModel
+                return new LoggedUser
                 {
                     Username = user.UserName,
                     Token = _jwtGenerator.CreateToken(user, roleName)
@@ -79,7 +80,7 @@ namespace Infrastructure.Services
             throw new RestException(HttpStatusCode.Unauthorized);
         }
 
-        public async Task<LoggedUserModel> Register(RegisterCommand command)
+        public async Task<LoggedUser> Register(RegisterCommand command)
         {
             if (await _identityContext.Users.AnyAsync(x => x.Email == command.Email))
                 throw new BadRequestException("Email already exists");
@@ -96,7 +97,7 @@ namespace Infrastructure.Services
             {
                 await _userManager.AddToRoleAsync(user, "User");
 
-                return new LoggedUserModel
+                return new LoggedUser
                 {
                     Username = user.UserName,
                     Token = _jwtGenerator.CreateToken(user, "User")

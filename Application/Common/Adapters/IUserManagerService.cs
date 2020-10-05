@@ -6,7 +6,8 @@ namespace Application.Common.Adapters
 {
     public interface IUserManagerService
     {
-        Task<LoggedUserModel> Login(LoginQuery request);
-        Task<LoggedUserModel> Register(RegisterCommand command);
+        Task<LoggedUser> Login(LoginQuery request);
+        Task<LoggedUser> Register(RegisterCommand command);
+        Task<LoggedUser> RefreshUser();
     }
 }

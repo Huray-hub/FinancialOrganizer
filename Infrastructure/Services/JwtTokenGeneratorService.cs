@@ -21,7 +21,7 @@ namespace Infrastructure
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(JwtRegisteredClaimNames.NameId, user.UserName),
+                new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
                 new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
                 new Claim(ClaimTypes.Role, roleName)
             };

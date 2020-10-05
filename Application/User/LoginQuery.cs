@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Application.User
 {
-    public class LoginQuery : IRequest<LoggedUserModel>
+    public class LoginQuery : IRequest<Common.Models.LoggedUser>
     {
         public string Email { get; set; }
         public string Password { get; set; }
@@ -22,14 +22,14 @@ namespace Application.User
         }
     }
 
-    public class LoginQueryHandler : IRequestHandler<LoginQuery, LoggedUserModel>
+    public class LoginQueryHandler : IRequestHandler<LoginQuery, Common.Models.LoggedUser>
     {
         private readonly IUserManagerService _userManagerService;
 
         public LoginQueryHandler(IUserManagerService userManagerService) =>
             _userManagerService = userManagerService;
 
-        public async Task<LoggedUserModel> Handle(LoginQuery request, CancellationToken cancellationToken) =>
+        public async Task<Common.Models.LoggedUser> Handle(LoginQuery request, CancellationToken cancellationToken) =>
             await _userManagerService.Login(request);
     }
 }
