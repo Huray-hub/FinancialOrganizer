@@ -40,7 +40,8 @@ namespace Application.Transactions.Queries.GetTransactionsList
         {
             Func<IQueryable<Transaction>, IQueryable<Transaction>> includeFunc = null;
 
-            if (request.IncludeNavigationProperties) includeFunc = _transactionQueryables.IncludeNavigationProperties;
+            if (request.IncludeNavigationProperties) 
+                includeFunc = _transactionQueryables.IncludeNavigationProperties;
 
             var transactions = await _transactionUnitOfWorkQuery.GetTransactions(_currentUserService.UserId, includeFunc);
 
